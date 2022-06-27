@@ -11,7 +11,7 @@ function Company() {
 
   const company = {
     ID: 0,
-    name: "Oferta 0",
+    name: "Firma 0",
   };
 
   return (

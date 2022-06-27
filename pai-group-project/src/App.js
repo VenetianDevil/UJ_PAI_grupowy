@@ -15,9 +15,11 @@ import Logout from './_page/logout';
 import JobOffers from './_page/jobOffers';
 import Companies from './_page/companies';
 import JobOffer from './_page/jobOffer';
-import Company from './_page/company';
+// import Company from './_page/company';
 import Register from './_page/register';
 import Login from './_page/login';
+import Account from './_page/account';
+import Profile from './_page/profile';
 
 function App() {
 
@@ -41,11 +43,12 @@ function App() {
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Nav className='ms-auto' activeKey={currentUrl} onSelect={handleSelect}>
                 <Navbar.Collapse id="basic-navbar-nav" >
-                  {currentUserValue() ? <Navbar.Text>{currentUserValue().Username} </Navbar.Text> : null}
+                  {currentUserValue() ? <Navbar.Text>{currentUserValue().givenName} </Navbar.Text> : null}
                   <Nav.Link href="/oferty">Oferty</Nav.Link>
                   <Nav.Link href="/firmy">Firmy</Nav.Link>
-                  {currentUserValue() ? (currentUserValue().type == 1 ? <Nav.Link href="/konto/kandydat">Konto</Nav.Link> : null) : null}
-                  {currentUserValue() ? (currentUserValue().type == 2 ? <Nav.Link href="/konto/firma">Konto</Nav.Link> : null) : null}
+                  {currentUserValue() ? <Nav.Link href="/konto">Konto</Nav.Link> : null}
+                  {/* {currentUserValue() ? (currentUserValue().type == 1 ? <Nav.Link href="/konto/kandydat">Konto</Nav.Link> : null) : null} */}
+                  {/* {currentUserValue() ? (currentUserValue().type == 2 ? <Nav.Link href="/konto/firma">Konto</Nav.Link> : null) : null} */}
                   {!currentUserValue() ? <Nav.Link href="/rejestracja">Rejestracja</Nav.Link> : null}
                   {!currentUserValue() ? <Nav.Link href="/logowanie">Logowanie</Nav.Link> : null}
                   {currentUserValue() ? <Nav.Link href="/logout">Wyloguj</Nav.Link> : null}
@@ -64,7 +67,9 @@ function App() {
             <Route path="/oferty" element={<JobOffers />} />
             <Route path="/firmy" element={<Companies />} />
             <Route exact path='oferta/:id' element={<JobOffer />}> </Route>
-            <Route exact path='firma/:id' element={<Company />}> </Route>
+            {/* <Route exact path='firma/:id' element={<Company />}> </Route> */}
+            <Route exact path='profil/:id' element={<Profile />}> </Route>
+            <Route exact path='konto' element={<Account />}> </Route>
             {/* <Route exact path='konto/kandydat' element={<UserAccount />}> </Route> */}
             {/* <Route exact path='konto/firma' element={<CompanyAccount />}> </Route> */}
             <Route path="rejestracja" element={<Register />} />
