@@ -72,7 +72,7 @@ function MainPage() {
               <div className='card company-card' key={company.ID}>
                 <h3>{company.name}</h3>
                 <p>Kraków</p>
-                <Link to={`/firma/${company.ID}`}><Button>Zobacz</Button></Link>
+                <Link to={`/profil/${company.ID}`}><Button>Zobacz</Button></Link>
               </div>
             </Col>
           )}

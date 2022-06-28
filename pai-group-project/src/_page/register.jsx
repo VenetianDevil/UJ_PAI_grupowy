@@ -6,11 +6,12 @@ import { NotificationManager } from 'react-notifications';
 var _ = require('lodash');
 
 function Register(props) {
-  const {isLoggedIn, register} = useAuth();
+  const { isLoggedIn, register } = useAuth();
   const [loading, setLoading] = useState(false);
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
   const [password_conf, setPasswordConf] = useState();
+  const [isCompany, setIsCompany] = useState(false);
   const setUserNameDebounce = _.debounce(setUserName, 500);
   const setPasswordDebounce = _.debounce(setPassword, 500);
   const setPasswordConfDebounce = _.debounce(setPasswordConf, 500);
@@ -27,9 +28,9 @@ function Register(props) {
     // OBSŁUGA BŁĘDÓW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! zajeta nazwa użyt.
     if (username && password && password === password_conf) {
       setLoading(true);
-      console.log({ username, password })
-      register({ username, password })
-      .then((user) => {
+      console.log({ username, password, isCompany })
+      register({ username, password, isCompany })
+        .then((user) => {
           setLoading(false);
           if (user) {
             navigate("/login");
@@ -47,7 +48,7 @@ function Register(props) {
           {/* <h2> Login </h2> */}
           <Form onSubmit={handleSubmit}>
 
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3" controlId="formBasicName">
               <Form.Label>Name *</Form.Label>
               <Form.Control type="text" placeholder="Name" onChange={e => setUserNameDebounce(e.target.value.trim())} />
             </Form.Group>
@@ -57,9 +58,13 @@ function Register(props) {
               <Form.Control type="password" placeholder="Password" onChange={e => setPasswordDebounce(e.target.value)} />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3" controlId="formBasicPasswordConfirm">
               <Form.Label>Password *</Form.Label>
               <Form.Control type="password" placeholder="Password" onChange={e => setPasswordConfDebounce(e.target.value)} />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicCompany">
+              <Form.Check type="checkbox" label="Jestem firmą" value={isCompany} onChange={e => setIsCompany(!isCompany)} />
             </Form.Group>
 
             <Button variant="success" type="submit" className='w-100' disabled={loading}>
