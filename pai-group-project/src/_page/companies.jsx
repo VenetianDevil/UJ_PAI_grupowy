@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { LoaderComponent } from '../_components/LoaderComponent';
-import useAuth from '../_services/useAuth';
 import { Row, Button, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 

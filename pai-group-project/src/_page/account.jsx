@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { LoaderComponent } from '../_components/LoaderComponent';
 import useAuth from '../_services/useAuth';
-import { Row, Button, Col, Form, Table } from 'react-bootstrap';
+import { Row, Button, Col, Form } from 'react-bootstrap';
 import { Link, useNavigate } from "react-router-dom";
-import { wait } from '@testing-library/user-event/dist/utils';
-import { OffersComponent } from '../_components/OffersComponent';
+import OffersComponent from '../_components/OffersComponent';
+import RecruitmentsComponent from '../_components/RecruitmentsComponent';
+import useModal from '../_services/useModal';
+import AddOfferModalComponent from '../_components/AddOfferModalComponent';
 var _ = require('lodash');
 
 function Account() {
@@ -12,7 +14,7 @@ function Account() {
   const [editMode, setEditMode] = useState(false);
   const [user, setUser] = useState({
     ID: 0,
-    type: 1,
+    type: 2,
     email: "dnaod@google.com",
     imageUrl: "https://st2.depositphotos.com/1009634/7235/v/450/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
     givenName: "Tomek", // user
@@ -30,6 +32,7 @@ function Account() {
   })
   const [newUserData, setNewUserData] = useState({ ID: user.ID });
   const [isLoading, setIsLoading] = useState(false);
+  const [modal, openModal, closeModal] = useModal("AddOfferModalComponent");
 
   let navigate = useNavigate();
 
@@ -189,33 +192,18 @@ function Account() {
       </section>
 
       {
-        user.type == 1 ?
-          <section>
-            <h2>Rekrutacje:</h2>
-
-            <Table responsive="sm">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Nazwa stanowiska</th>
-                  <th>Firma</th>
-                  <th>Data</th>
-                  <th title="0-złożona, 1-przyjęta, 2-W trakcie kwalifikacji, 3-Rozpatrzona">Etap</th>{/* etapy rekrutacji 0-złożona, 1-przyjęta, 2-W trakcie kwalifikacji, 3-Rozpatrzona */}
-                  <th>Status</th>{/* 0-przetwarzana, 1-przyjęta, 2-odrzucona, 3-anulowana */}
-                </tr>
-              </thead>
-            </Table>
-          </section>
-          : null
-      }
-
-      {
         user.type == 2 ?
           <section>
+            <Button className="position-absolute" onClick={openModal}>Dodaj nową ofertę</Button>
             <OffersComponent></OffersComponent>
+            {modal.show ? <AddOfferModalComponent modal={modal} callback={closeModal}></AddOfferModalComponent> : null}
           </section>
           : null
       }
+
+      <section>
+        <RecruitmentsComponent></RecruitmentsComponent>
+      </section>
     </div >
   )
 }

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { LoaderComponent } from '../_components/LoaderComponent';
 import useAuth from '../_services/useAuth';
-import { Row, Button, Col, Table } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Row, Col } from 'react-bootstrap';
 import { FaInstagram, FaGitSquare, FaGlobe, FaLinkedin, FaFilePdf, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
-import { OffersComponent } from '../_components/OffersComponent';
+import OffersComponent from '../_components/OffersComponent';
 
 function Profile() {
 
@@ -27,15 +26,13 @@ function Profile() {
     companyUrl: "https://www.ibm.com/pl-pl" // company
   }
 
-  // https://www.dreamstime.com/no-image-available-icon-photo-camera-flat-vector-illustration-image132483141
-
   return (
     <div>
       <section className='mb-5'>
         <Row>
-          <h2 className='my-4 text-start d-block d-md-none'>{user.givenName} {user.familyName}</h2>
+          <h2 className='my-4 text-start d-block d-md-none'>{user.type == 1 ? user.givenName + " " + user.familyName : user.companyName}</h2>
           <Col xs={{ span: 12, order: 2 }} md={{ order: 1, span: 8 }} >
-            <h2 className='my-4 text-start d-none d-md-block'>{user.givenName} {user.familyName}</h2>
+            <h2 className='my-4 text-start d-none d-md-block'>{user.type == 1 ? user.givenName + " " + user.familyName : user.companyName}</h2>
             {user.type == 2 && user.companyUrl ? <a href={user.companyUrl}><FaGlobe />&nbsp;Strona oficjalna<br /></a> : null}
             {user.type == 1 && user.portfolioUrl ? <a href={user.portfolioUrl}><FaGlobe />&nbsp;Prtfolio<br /></a> : null}
             {user.instagram != "" ? <a href={user.instagram}><FaInstagram />&nbsp;Instagram<br /></a> : null}
@@ -46,7 +43,7 @@ function Profile() {
           </Col>
           <Col xs={{ order: 1, span: 12 }} md={{ order: 2, span: 4 }}>
             <div className='mb-3'>
-              <img src={user.imageUrl} className="img-thumbnail" style={{ maxWidth: "300px", width: "100%" }}></img><br /><br />
+              <img src={user.imageUrl ? user.imageUrl : "https://icon-library.com/images/no-user-image-icon/no-user-image-icon-3.jpg"} className="img-thumbnail" style={{ maxWidth: "300px", width: "100%" }}></img><br /><br />
               {user.type == 2 && user.hqLocation ? <p>{user.hqLocation}<br /></p> : null}
               {user.type == 1 && user.cvPdfUrl ? <a href={user.cvPdfUrl} target="_blank"><FaFilePdf />&nbsp;CV pdf<br /></a> : null}
               {user.email ? <a href={`mailto: ${user.email}`}><FaEnvelope />&nbsp;{user.email}<br /></a> : null}

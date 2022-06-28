@@ -1,17 +1,20 @@
 import useAuth from '../_services/useAuth'
-import { useState, useReducer } from 'react';
+import { useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { LoaderComponent } from '../_components/LoaderComponent';
+import { NotificationManager } from 'react-notifications';
+import useLogin from '../_services/useLogin';
 var _ = require('lodash');
 
-function Login(props) {
-  const {isLoggedIn, login} = useAuth();
+function Login() {
+  const { isLoggedIn, login } = useAuth();
+  const { signIn } = useLogin();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const setUserNameDebounce = _.debounce(setUserName, 500);
-  const setPasswordDebounce = _.debounce(setPassword, 500);
+  // const setUserNameDebounce = _.debounce(setUserName, 500);
+  // const setPasswordDebounce = _.debounce(setPassword, 500);
   // const [_, forceUpdate] = useReducer((x) => x + 1, 0);
   const navigate = useNavigate();
 
@@ -27,17 +30,25 @@ function Login(props) {
       setLoading(true);
       setPassword("");
       // console.log(username, password);
-      login({ username, password })
+      signIn({ username, password })
         .then((res) => {
-          setLoading(false);
-          if (res) {
-            navigate("/", { replace: true });
+          if (!!res.user) {
+            let user = res.user;
+            user.token = res.token
+            login(user);
           } else {
-            // NotificationManager.error('Username and/or password are inncorect', 'Error!');
+            NotificationManager.error("Logowanie nie udało się", "Error!");
           }
+          // setLoading(false);
+          // if (res) {
+          //   navigate("/", { replace: true });
+          // } else {
+          //   // NotificationManager.error('Username and/or password are inncorect', 'Error!');
+          // }
         })
-        .catch((err) => {
-          console.error(err);
+        .catch((error) => {
+          NotificationManager.error(error.message, 'Error!');
+          console.error(error);
         })
     } else {
       // 
@@ -51,9 +62,9 @@ function Login(props) {
           {/* <h2> Login </h2> */}
           <Form onSubmit={handleSubmit}>
 
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Name *</Form.Label>
-              <Form.Control type="text" placeholder="Name" onChange={e => setUserName(e.target.value.trim())} />
+            <Form.Group className="mb-3" controlId="formBasicLogin">
+              <Form.Label>Login *</Form.Label>
+              <Form.Control type="text" placeholder="Login" onChange={e => setUserName(e.target.value.trim())} />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">

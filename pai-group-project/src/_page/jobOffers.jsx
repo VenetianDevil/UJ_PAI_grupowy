@@ -3,8 +3,12 @@ import { LoaderComponent } from '../_components/LoaderComponent';
 import useAuth from '../_services/useAuth';
 import { Row, Button, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import useModal from '../_services/useModal';
+import OfferModalComponent from '../_components/OfferModalComponent';
 
 function JobOffers() {
+
+  const [modal, openModal, closeModal] = useModal("OfferModalComponent");
 
   const jobOffers = [{
     ID: 0,
@@ -37,12 +41,14 @@ function JobOffers() {
               <div className='card jobOffer-card' key={offer.ID}>
                 <h3>{offer.title}</h3>
                 <p>Nazwa firmy</p>
-                <Link to={`/oferta/${offer.ID}`}><Button>Zobacz</Button></Link>
+                <Button onClick={() => openModal(offer)}>Zobacz</Button>
               </div>
             </Col>
           )}
         </Row>
       </section>
+      {modal.show ? <OfferModalComponent modal={modal} callback={closeModal}></OfferModalComponent> : null }
+
     </div>
   )
 }

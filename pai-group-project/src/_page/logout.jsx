@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { LoaderComponent } from '../_components/LoaderComponent';
 import useAuth from '../_services/useAuth';
-import { Button } from 'react-bootstrap';
-import { Link } from "react-router-dom";
 
 function Logout(props) {
 
@@ -33,7 +31,7 @@ function Logout(props) {
   return (
     <div>
       <h2>Goodbye</h2>
-      <Link to="/" ><Button type='button'>Produkty</Button></Link>
+      {/* <Link to="/" ><Button type='button'>Produkty</Button></Link> */}
     </div>
   )
 }
