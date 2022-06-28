@@ -114,7 +114,6 @@ async function login(json_data){
 
 module.exports = {
     verifyToken,
-    verifyTokenAdmin,
     generateToken,
     login
 }

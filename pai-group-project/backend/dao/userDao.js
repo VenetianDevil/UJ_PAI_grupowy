@@ -2,8 +2,8 @@
 
 const bcrypt = require('bcrypt');
 const User = require("../models/User");
-const UserProfileDao = require("UserProfileDao");
-const CompanyProfileDao = require("CompanyProfileDao");
+const UserProfileDao = require("./UserProfileDao");
+const CompanyProfileDao = require("./CompanyProfileDao");
 const UserProfile = require("../models/UserProfile");
 const CompanyProfile = require("../models/CompanyProfile");
 
