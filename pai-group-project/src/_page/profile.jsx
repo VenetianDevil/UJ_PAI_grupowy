@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { LoaderComponent } from '../_components/LoaderComponent';
 import useAuth from '../_services/useAuth';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import { FaInstagram, FaGitSquare, FaGlobe, FaLinkedin, FaFilePdf, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import OffersComponent from '../_components/OffersComponent';
 import useUsers from '../_services/useUsers';
@@ -49,6 +49,10 @@ function Profile() {
     }
   }, [isLoading])
 
+  function changeView() {
+    setUser({...user, type: user.type == 1 ? 2 : 1});
+  }
+
   if (!!isLoading) {
     return (<LoaderComponent></LoaderComponent>)
   }
@@ -58,6 +62,8 @@ function Profile() {
       <section className='mb-5'>
         <Row>
           <h2 className='my-4 text-start d-block d-md-none'>{user.type == 1 ? user.givenName + " " + user.familyName : user.companyName}</h2>
+          <div className="float-end" style={{ marginTop: "-40px" }}><Button type="button" onClick={changeView}>Zmień typ użytkownika</Button></div>
+
           <Col xs={{ span: 12, order: 2 }} md={{ order: 1, span: 8 }} >
             <h2 className='my-4 text-start d-none d-md-block'>{user.type == 1 ? user.givenName + " " + user.familyName : user.companyName}</h2>
             {user.type == 2 && user.companyUrl ? <a href={user.companyUrl}><FaGlobe />&nbsp;Strona oficjalna<br /></a> : null}

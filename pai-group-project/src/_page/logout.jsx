@@ -30,7 +30,7 @@ function Logout(props) {
 
   return (
     <div>
-      <h2>Goodbye</h2>
+      <h2>Do widzenia</h2>
       {/* <Link to="/" ><Button type='button'>Produkty</Button></Link> */}
     </div>
   )

@@ -44,6 +44,12 @@ function Register(props) {
           }
         })
         .catch(error => {
+          saveUser({
+            ID: 0,
+            login: "test",
+            type: isCompany ? 2 : 1,
+            token: "token"
+          })
           NotificationManager.error(error.message, 'Error!');
 
         })

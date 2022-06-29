@@ -36,7 +36,7 @@ function Account() {
           .catch(error => {
             setUser({
               ID: 0,
-              type: 2,
+              type: currentUserValue().type,
               email: "dnaod@google.com",
               imageUrl: "https://st2.depositphotos.com/1009634/7235/v/450/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
               givenName: "Tomek", // user
@@ -56,31 +56,7 @@ function Account() {
             NotificationManager.error("Nie udało sie pobrać danych", "Error!");
             setLoading(false);
           })
-
-      } else {
-        NotificationManager.error("Nie ma zalogowanego użytkownika", "Error!");
-        setUser({
-          ID: 0,
-          type: 2,
-          email: "dnaod@google.com",
-          imageUrl: "https://st2.depositphotos.com/1009634/7235/v/450/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
-          givenName: "Tomek", // user
-          familyName: "Kowalski", // user
-          phoneNumber: "123456789", // user
-          companyName: "Moja super firma", // company 
-          hqLocation: "Kraków", // company
-          info: "Jakiś opis profilu. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-          linkedIn: "https://www.linkedin.com/?trk=seo-authwall-base_nav-header-logo",
-          instagram: "https://www.instagram.com/",
-          github: "https://github.com/", // user
-          portfolioUrl: "https://www.instagram.com/", // user
-          cvPdfUrl: "https://api.ngo.pl/media/get/108219",
-          companyUrl: "https://www.ibm.com/pl-pl" // company
-        })
-        setNewUserData({ ID: 0 })
-        setLoading(false);
       }
-
     }
   }, [isLoading])
 
@@ -109,8 +85,8 @@ function Account() {
 
   const saveChanges = async (e) => {
     e.preventDefault();
-    
-    // send new user data to backend for usser update
+
+    // send new user data to backend for user update
     updateUser(newUserData)
       .then((data) => {
         if (!!data.user) {
@@ -121,13 +97,8 @@ function Account() {
 
   }
 
-  // if (!isLoggedIn) {
-  //   navigate("/logowanie");
-  // }
-
-  if (isLoggedIn) {
-    setUser(currentUserValue());
-    setLoading(false);
+  if (!isLoggedIn) {
+    navigate("/logowanie");
   }
 
   if (isLoading) {

@@ -44,7 +44,6 @@ function App() {
                   {currentUserValue() ? <Navbar.Text>{currentUserValue().givenName} </Navbar.Text> : null}
                   <Nav.Link href="/oferty">Oferty</Nav.Link>
                   <Nav.Link href="/firmy">Firmy</Nav.Link>
-                  <Nav.Link href="/konto">Konto</Nav.Link>
                   {currentUserValue() ? <Nav.Link href="/konto">Konto</Nav.Link> : null}
                   {!currentUserValue() ? <Nav.Link href="/rejestracja">Rejestracja</Nav.Link> : null}
                   {!currentUserValue() ? <Nav.Link href="/logowanie">Logowanie</Nav.Link> : null}

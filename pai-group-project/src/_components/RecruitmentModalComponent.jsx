@@ -11,7 +11,8 @@ export default function RecruitmentModalComponent(props) {
   const modal = props.modal;
   const { isLoggedIn, currentUserValue } = useAuth();
   const { updateUserRecruitment } = useUsers();
-  const { disable, setDisable } = useState(!!currentUserValue() && currentUserValue().type == 1); //modyfikacja niedostępna dla zwykłego użytkownika, tylko firmy
+  const [ disable ] = useState(!!currentUserValue() && currentUserValue().type == 1); //modyfikacja niedostępna dla zwykłego użytkownika, tylko firmy
+  const [ disableForm, setDisableForm ] = useState(false);
   const [ recruitment, setRecruitment ] = useState(modal.data);
   var callback = props.callback;
 
@@ -19,24 +20,27 @@ export default function RecruitmentModalComponent(props) {
     changeState(3);
     updateRecruitment();
   }
-
+  
   function changeStage(val) {
     setRecruitment({ ...recruitment, stage: val })
   }
 
-
   function changeState(val) {
     setRecruitment({ ...recruitment, state: val })
-
   }
 
   function updateRecruitment() {
+    setDisableForm(true);
     updateUserRecruitment(recruitment.ID, { stage: recruitment.stage, state: recruitment.state })
       .then(data => {
-        NotificationManager.success("Rekrutacja zaktializowana", "Sukces!");
+        setDisableForm(false);
+        NotificationManager.success("Rekrutacja zaktualizowana", "Sukces!");
+        callback();
       })
       .catch(error => {
+        setDisableForm(false);
         NotificationManager.error("Aktializacja nieudana", "Błąd!");
+        callback();
 
       })
   }
@@ -61,14 +65,14 @@ export default function RecruitmentModalComponent(props) {
                   <Form onSubmit={saveChanges} id="recruitmentForm">
                     <p><b>Firma:</b> {recruitment.companyName}</p>
                     <p><b>Kandydat:</b> Jan Kowalski</p>
-                    <p><b>Koniec rekrutacji:</b> {recruitment.endDate}</p>
-                    <p><b className="float-start">Etap:</b> <Form.Select defaultValue={recruitment.stage} disabled={disable} onChange={(e) => changeStage(e.target.value)} size="sm" className="w-auto">{/*0-złożona, 1-zaakceptwana, 2-W trakcie kwalifikacji, 3-Rozpatrzona*/}
+                    <p><b>Data złożenia podania:</b> {recruitment.date}</p>
+                    <p><b className="float-start">Etap:</b> <Form.Select defaultValue={recruitment.stage} disabled={disable || disableForm} onChange={(e) => changeStage(e.target.value)} size="sm" className="w-auto">{/*0-złożona, 1-zaakceptwana, 2-W trakcie kwalifikacji, 3-Rozpatrzona*/}
                       <option value="0">złożona</option>
                       <option value="1">zaakceptwana</option>
                       <option value="2">rozpatrywana</option>
                       <option value="3">zakończona</option>
                     </Form.Select></p>
-                    <p><b className="float-start">Status:</b> <Form.Select defaultValue={recruitment.status} disabled={disable} onChange={(e) => changeState(e.target.value)} size="sm" className="w-auto">{/* 0-przetwarzana, 1-przyjęty, 2-odrzucona, 3-anulowana */}
+                    <p><b className="float-start">Status:</b> <Form.Select defaultValue={recruitment.status} disabled={disable || disableForm} onChange={(e) => changeState(e.target.value)} size="sm" className="w-auto">{/* 0-przetwarzana, 1-przyjęty, 2-odrzucona, 3-anulowana */}
                       <option value="0">przetwarzana</option>
                       <option value="1">przyjęty</option>
                       <option value="2">odrzucony</option>
@@ -76,17 +80,16 @@ export default function RecruitmentModalComponent(props) {
                     </Form.Select></p>
                   </Form>
                 </Col>
-
               </Row>
             </Modal.Body>
             {
               isLoggedIn ?
                 <Modal.Footer>
                   {currentUserValue().type == 1 ?
-                    <Button variant="primary" onClick={resign}>
+                    <Button variant="primary" onClick={resign} disabled={disableForm}>
                       Rezyguj
                     </Button> :
-                    <Button type="submit" form="recruitmentForm" variant="primary">
+                    <Button type="submit" form="recruitmentForm" variant="primary" disabled={disableForm}>
                       Zapisz zmiany
                     </Button>}
                 </Modal.Footer>
