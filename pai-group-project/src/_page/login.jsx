@@ -8,7 +8,7 @@ import useLogin from '../_services/useLogin';
 var _ = require('lodash');
 
 function Login() {
-  const { isLoggedIn, login } = useAuth();
+  const { isLoggedIn, saveUser } = useAuth();
   const { signIn } = useLogin();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +35,7 @@ function Login() {
           if (!!res.user) {
             let user = res.user;
             user.token = res.token
-            login(user);
+            saveUser(user);
           } else {
             NotificationManager.error("Logowanie nie udało się", "Error!");
           }

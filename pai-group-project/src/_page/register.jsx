@@ -8,7 +8,7 @@ import useLogin from '../_services/useLogin';
 var _ = require('lodash');
 
 function Register(props) {
-  const { isLoggedIn, register } = useAuth();
+  const { isLoggedIn, saveUser } = useAuth();
   const { signUp } = useLogin();
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState();
@@ -37,7 +37,7 @@ function Register(props) {
           if (!!res.user) {
             let user = res.user;
             user.token = res.token;
-            register(user);
+            saveUser(user);
             // setLoading(false);
           } else {
             NotificationManager.error("Rejestracja nie udała się", "Error!");

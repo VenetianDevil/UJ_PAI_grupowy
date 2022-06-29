@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-import { environment } from '../environment.ts';
-
 function useModal(type) {
   const [modal, setModal] = useState({ type: type, show: false, data: null });
 
