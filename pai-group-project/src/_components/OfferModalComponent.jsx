@@ -3,16 +3,26 @@ import "../_styles/loader.css";
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import useAuth from '../_services/useAuth';
 import { LoaderComponent } from './LoaderComponent';
+import useOffers from '../_services/useOffers';
+import { NotificationManager } from 'react-notifications';
 
 export default function OfferModalComponent(props) {
 
+  const { applyForAJob } = useOffers();
   const { isLoggedIn, currentUserValue } = useAuth();
   const modal = props.modal;
   const jobOffer = modal.data;
   var callback = props.callback;
 
   function apply() {
-
+    applyForAJob({ offerID: jobOffer.ID, userID: currentUserValue().ID })
+      .then((data) => {
+        NotificationManager.success("Złożyłeś podanie o pracę", "Sukces!");
+        callback();
+      })
+      .catch(error => {
+        NotificationManager.error("Coś poszło nie tak.", "Błąd")
+      })
   }
 
   return (

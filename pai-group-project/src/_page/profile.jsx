@@ -4,26 +4,53 @@ import useAuth from '../_services/useAuth';
 import { Row, Col } from 'react-bootstrap';
 import { FaInstagram, FaGitSquare, FaGlobe, FaLinkedin, FaFilePdf, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import OffersComponent from '../_components/OffersComponent';
+import useUsers from '../_services/useUsers';
+import { useParams } from "react-router-dom";
+import { NotificationManager } from 'react-notifications';
 
 function Profile() {
+  const { id } = useParams();
+  const { getUser } = useUsers();
+  const [isLoading, setLoading] = useState(true);
+  const [user, setUser] = useState({});
 
-  const user = {
-    ID: 0,
-    type: 2,
-    email: "dnaod@google.com",
-    imageUrl: "https://st2.depositphotos.com/1009634/7235/v/450/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
-    givenName: "Tomek", // user
-    familyName: "Kowalski", // user
-    phoneNumber: "123456789", // user
-    companyName: "Moja super firma", // company 
-    hqLocation: "Kraków", // company
-    info: "Jakiś opis profilu. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    linkedIn: "https://www.linkedin.com/?trk=seo-authwall-base_nav-header-logo",
-    instagram: "https://www.instagram.com/",
-    github: "https://github.com/", // user
-    portfolioUrl: "https://www.instagram.com/", // user
-    cvPdfUrl: "https://api.ngo.pl/media/get/108219",
-    companyUrl: "https://www.ibm.com/pl-pl" // company
+  useEffect(() => {
+    if (isLoading) {
+      getUser(id)
+        .then((data) => {
+          if (!!data.user) {
+            setUser(data.user);
+          }
+          setLoading(false);
+        })
+        .catch(error => {
+          setUser({
+            ID: 0,
+            type: 2,
+            email: "dnaod@google.com",
+            imageUrl: "https://st2.depositphotos.com/1009634/7235/v/450/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
+            givenName: "Tomek", // user
+            familyName: "Kowalski", // user
+            phoneNumber: "123456789", // user
+            companyName: "Moja super firma", // company 
+            hqLocation: "Kraków", // company
+            info: "Jakiś opis profilu. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            linkedIn: "https://www.linkedin.com/?trk=seo-authwall-base_nav-header-logo",
+            instagram: "https://www.instagram.com/",
+            github: "https://github.com/", // user
+            portfolioUrl: "https://www.instagram.com/", // user
+            cvPdfUrl: "https://api.ngo.pl/media/get/108219",
+            companyUrl: "https://www.ibm.com/pl-pl" // company
+          })
+          NotificationManager.error("Nie udało sie pobrać danych", "Error!");
+          setLoading(false);
+        })
+
+    }
+  }, [isLoading])
+
+  if (!!isLoading) {
+    return (<LoaderComponent></LoaderComponent>)
   }
 
   return (
@@ -55,7 +82,7 @@ function Profile() {
       </section>
       {user.type == 2 ?
         <section>
-          <OffersComponent></OffersComponent>
+          <OffersComponent companyID={user.ID}></OffersComponent>
 
         </section>
         : null

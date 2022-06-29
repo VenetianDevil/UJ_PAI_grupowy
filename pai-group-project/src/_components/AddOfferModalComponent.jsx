@@ -3,11 +3,13 @@ import "../_styles/loader.css";
 import { Modal, Button, Form } from 'react-bootstrap';
 import useAuth from '../_services/useAuth';
 import { LoaderComponent } from './LoaderComponent';
+import useOffers from '../_services/useOffers';
 var _ = require('lodash');
 
 export default function AddOfferModalComponent(props) {
 
   const { isLoggedIn, currentUserValue } = useAuth();
+  const { addOffer } = useOffers();
   const modal = props.modal;
   const { jobOffer, setJobOffer } = useState();
   var callback = props.callback;
@@ -25,7 +27,15 @@ export default function AddOfferModalComponent(props) {
   const handleChangeDebounce = _.debounce(handleChange, 500);
 
   function createOffer() {
+    jobOffer.companyID = currentUserValue().ID;
+    
+    addOffer(jobOffer)
+      .then(data => {
+        callback();
+      })
+      .catch(error => {
 
+      })
   }
 
   return (
@@ -56,7 +66,7 @@ export default function AddOfferModalComponent(props) {
 
             <Form.Group className="mb-3">
               <Form.Label>Informacje o stanowisku *</Form.Label>
-              <Form.Control id="info" as="textarea" rows={3} placeholder="Lorem ipsum..."  onChange={e => handleChangeDebounce(e)} />
+              <Form.Control id="info" as="textarea" rows={3} placeholder="Lorem ipsum..." onChange={e => handleChangeDebounce(e)} />
             </Form.Group>
 
             <Form.Group className="mb-3">
