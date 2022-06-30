@@ -4,6 +4,7 @@
 const express = require('express');
 const db = require('./config/database');
 const cors = require('cors')
+const path = require("path");
 
 const app = express();
 
@@ -28,7 +29,12 @@ Your id is: ${req.user_id}.
     res.status(200).send(response);
 })
 
+// serwowanie static frontendu
+app.use(express.static(path.join(__dirname, "..", "build")))
+  .use((req, res, next) => {
+    res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+  });
 
 app.listen(PORT, () => {
-    console.log('Exam app listening on port '+ PORT +' !');
+  console.log('Exam app listening on port ' + PORT + ' !');
 });
