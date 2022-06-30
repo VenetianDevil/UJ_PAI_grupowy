@@ -4,8 +4,8 @@ const { Model, DataTypes } = require('sequelize');
 const db = require('../config/database');
 
 
-class JobOffer extends Model {}
-JobOffer.init({
+class JobOffers extends Model {}
+JobOffers.init({
     offerID: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -44,14 +44,23 @@ JobOffer.init({
     end_date: {
         type: DataTypes.TIME,
         allowNull: false,
+    },
+    createdAt:{
+        type:DataTypes.DATE,
+        allowNull:false
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull:false
     }
+
 },
 {
     sequelize:db,
     timestamps:false,
 });
 
-JobOffer.sync();
-module.exports = JobOffer;
+JobOffers.sync();
+module.exports = JobOffers;
 
 

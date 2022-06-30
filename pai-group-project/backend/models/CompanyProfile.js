@@ -3,8 +3,8 @@
 const { Model, DataTypes } = require('sequelize');
 const db = require('../config/database');
 
-class CompanyProfile extends Model {}
-CompanyProfile.init({
+class CompanyProfiles extends Model {}
+CompanyProfiles.init({
     companyID: {
         type: DataTypes.INTEGER,
         primaryKey: true
@@ -40,11 +40,19 @@ CompanyProfile.init({
     companyURL: {
         type: DataTypes.STRING,
         allowNull: true,
+    },
+    createdAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
     }},
     {
         sequelize:db,
 });
 
-CompanyProfile.sync();
+CompanyProfiles.sync();
 
-module.exports = CompanyProfile
+module.exports = CompanyProfiles

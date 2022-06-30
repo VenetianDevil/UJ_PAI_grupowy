@@ -128,7 +128,7 @@ async function createUser(json_in){
     if(user_r.success){
         user_r.user = await user_r.user.save();
     }
-    user_r = getUserByUsername(user_r.user.login);
+    user_r.user = getUserByUsername(user_r.user.login);
     json_in.id = user_r.user.id;
     let user_p;
     if (json_in.type === 1){

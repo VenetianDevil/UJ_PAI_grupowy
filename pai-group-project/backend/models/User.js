@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require('sequelize')
 const db = require('../config/database')
 
-class User extends Model {}
+class Users extends Model {}
 
-User.init({
+Users.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -20,11 +20,19 @@ User.init({
     type: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    createdAt:{
+        type:DataTypes.DATE,
+        allowNull:false
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull:false
     }
 }, {
     sequelize: db
 })
 
-User.sync()
+Users.sync()
 
-module.exports = User
+module.exports = Users

@@ -3,8 +3,8 @@
 const { Model, DataTypes } = require('sequelize');
 const db = require('../config/database');
 
-class UserProfile extends Model {}
-UserProfile.init({
+class UserProfiles extends Model {}
+UserProfiles.init({
     userID: {
         type: DataTypes.INTEGER,
         primaryKey: true
@@ -53,12 +53,21 @@ UserProfile.init({
     cvURL:{
         type:DataTypes.STRING,
         allowNull:true
+    },
+    createdAt:{
+        type:DataTypes.DATE,
+        allowNull:false
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull:false
     }
+
     
 },
 {
     sequelize:db,
 });
 
-UserProfile.sync();
-module.exports = UserProfile;
+UserProfiles.sync();
+module.exports = UserProfiles;
