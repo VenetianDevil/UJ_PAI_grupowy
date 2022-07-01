@@ -1,6 +1,10 @@
 import { environment } from '../environment.ts';
+import useAuth from './useAuth';
 
 function useServerService() {
+
+  const { currentUserValue } = useAuth();
+
   async function request(method, url, data) {
     url = `${environment.serverUrl}${url}`;
 
@@ -10,6 +14,8 @@ function useServerService() {
         body: JSON.stringify(data),
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'bearer ' + (!!currentUserValue() ? currentUserValue().token : ''),
+
         }
       })
         .then((res) => res.json())

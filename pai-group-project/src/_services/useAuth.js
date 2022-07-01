@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { NotificationManager } from 'react-notifications';
-import useServerService from './useServerService';
 
 var currentUserSubject;
 var currentUser;
 
 function useAuth() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [request] = useServerService();
 
   useEffect(() => {
     console.log("-------------------------------------- auth effect ----------------------------------------");
@@ -31,59 +29,21 @@ function useAuth() {
 
   }, [isLoggedIn])
 
-  function register(credentials) {
-    console.log("-------------------------------------- LOGIN ----------------------------------------");
-    if (!!credentials) {
+  // sprowadź to do jednej funkcji saveUserLocalStorage czy cos
+  function saveUser(user) {
+    console.log("-------------------------------------- SAVE USER ----------------------------------------");
+    if (!!user) {
       if (!currentUserSubject) {
-        return request('POST', `/users/register`, credentials)
-          .then((user) => {
-            if(!!user){
-              console.log('\tauth login proceed');
-              localStorage.setItem('currentUser', JSON.stringify(user));
-              currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
-              currentUserSubject.next(user);
-              setIsLoggedIn(true);
-            }
-
-            return user;
-          })
-          .catch(error => {
-            NotificationManager.error(error.message, 'Error!');
-            console.error(error)
-          })
+        console.log('\tauth login proceed');
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
+        currentUserSubject.next(user);
+        setIsLoggedIn(true);
       } else {
         NotificationManager.info("Alredy logged", 'Error!');
       }
     } else {
-      NotificationManager.error("No credentials to register", 'Error!');
-    }
-  }
-
-  function login(credentials) {
-    console.log("-------------------------------------- LOGIN ----------------------------------------");
-    if (!!credentials) {
-      if (!currentUserSubject) {
-        return request('POST', `/users/login`, credentials)
-          .then((user) => {
-            if(!!user){
-              console.log('\tauth login proceed');
-              localStorage.setItem('currentUser', JSON.stringify(user));
-              currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
-              currentUserSubject.next(user);
-              setIsLoggedIn(true);
-            }
-
-            return user;
-          })
-          .catch(error => {
-            NotificationManager.error(error.message, 'Error!');
-            console.error(error)
-          })
-      } else {
-        NotificationManager.info("Alredy logged", 'Error!');
-      }
-    } else {
-      NotificationManager.error("No credentials to log in", 'Error!');
+      NotificationManager.error("No user to register", 'Error!');
     }
   }
 
@@ -101,7 +61,7 @@ function useAuth() {
     setIsLoggedIn(false)
   }
 
-  return { isLoggedIn, register, login, logout, currentUserValue };
+  return { isLoggedIn, saveUser, logout, currentUserValue };
 }
 
 export default useAuth;

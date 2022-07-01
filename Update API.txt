@@ -1,0 +1,21 @@
+Update API
+
+kategorie ofert narazie są olane
+getBestOffers -> request('GET', `/best-offers`); -> po prostu randomowe 5 ofert zwróć
+getAllOffer -> request('GET', `/bulk-offer`); -> wszytskie oferty
+addOffer -> request('POST', `/create-offer`, offer); - utworzenie nowej oferty przez firmę
+applyForAJob -> request('POST', `/job-apply`, { userID, offerID }); - złożenia podania o pracę
+getCompanyOffers -> request('GET', `/companies/${companyID}/offers`); -> oferty wystawione przez te konkretną firmę
+
+DWA ENDPOINTY NA POBRANIE rekrutacji ŻEBY BYŁO WIADOMO ODRAZU PO JAKIEJ ZMIENNEJ SZUKAĆ, userID czy companyID
+getUserRecruitments -> request('GET', `/user/${userID}/recruitmets`); //szukanie po userID, tylko rekrutacje tego kandydata
+getCompanyRecruitments -> request('GET', `/companies/${companyID}/recruitments`); //szukanie po companyID, wszystkie rekrutacje dot. ofert tej firmy
+
+updateUserRecruitment -> request('PUT', `/recruitmets/${recruitmentID}`, {stage, state}); // anulowanie przez uzytkownika albo zmiana stage/status przez firmę -- tokenem trzeba bd sprawdzać kto o to prosi (uzytkownik czy firma) i czy ma do tego prawo
+
+DO INFORMACJI O KONTACH TYLKO ENDPOINTY user/ - musisz po typie sprawdzać o kogo chodzi
+getUser -> request('GET', `/user/${userID}`); //kandydat albo firma 
+updateUser -> request('PUT', `/user`, user); //user lub company profile // full obiekt wyślę
+
+getBestCompanies -> request('GET', `/best-companies`); -> po prostu randomowe 5 firm zwróć
+getAllCompanies ->  request('GET', `/companies`); -> wszystie firmy

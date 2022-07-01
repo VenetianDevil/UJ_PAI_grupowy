@@ -1,18 +1,21 @@
 import useAuth from '../_services/useAuth'
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { Link, useNavigate } from "react-router-dom";
 import { NotificationManager } from 'react-notifications';
+import useLogin from '../_services/useLogin';
+
 var _ = require('lodash');
 
 function Register(props) {
-  const { isLoggedIn, register } = useAuth();
+  const { isLoggedIn, saveUser } = useAuth();
+  const { signUp } = useLogin();
   const [loading, setLoading] = useState(false);
-  const [username, setUserName] = useState();
+  const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [password_conf, setPasswordConf] = useState();
   const [isCompany, setIsCompany] = useState(false);
-  const setUserNameDebounce = _.debounce(setUserName, 500);
+  const setUsernameDebounce = _.debounce(setUsername, 500);
   const setPasswordDebounce = _.debounce(setPassword, 500);
   const setPasswordConfDebounce = _.debounce(setPasswordConf, 500);
 
@@ -29,12 +32,26 @@ function Register(props) {
     if (username && password && password === password_conf) {
       setLoading(true);
       console.log({ username, password, isCompany })
-      register({ username, password, isCompany })
-        .then((user) => {
-          setLoading(false);
-          if (user) {
-            navigate("/login");
+      signUp({ login: username, password, type: isCompany ? 2 : 1 })
+        .then((res) => {
+          if (!!res.user) {
+            let user = res.user;
+            user.token = res.token;
+            saveUser(user);
+            // setLoading(false);
+          } else {
+            NotificationManager.error("Rejestracja nie udała się", "Error!");
           }
+        })
+        .catch(error => {
+          saveUser({
+            ID: 0,
+            login: "test",
+            type: isCompany ? 2 : 1,
+            token: "token"
+          })
+          NotificationManager.error(error.message, 'Error!');
+
         })
     } else {
       NotificationManager.error("Password and password confirmation are not the same", "Error in data!");
@@ -48,9 +65,9 @@ function Register(props) {
           {/* <h2> Login </h2> */}
           <Form onSubmit={handleSubmit}>
 
-            <Form.Group className="mb-3" controlId="formBasicName">
-              <Form.Label>Name *</Form.Label>
-              <Form.Control type="text" placeholder="Name" onChange={e => setUserNameDebounce(e.target.value.trim())} />
+            <Form.Group className="mb-3" controlId="formBasicLogin">
+              <Form.Label>Login *</Form.Label>
+              <Form.Control type="text" placeholder="Login" onChange={e => setUsernameDebounce(e.target.value.trim())} />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">

@@ -1,31 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import { LoaderComponent } from '../_components/LoaderComponent';
-import useAuth from '../_services/useAuth';
 import { Row, Button, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import { NotificationManager } from 'react-notifications';
+import useCompanies from '../_services/useCompanies';
 
 function Companies() {
 
-  const companies = [{
-    ID: 0,
-    name: "Firma 0",
-  }, {
-    ID: 1,
-    name: "Firma 1",
-  }, {
-    ID: 2,
-    name: "Firma 2",
-  }, {
-    ID: 3,
-    name: "Firma 3",
-  }, {
-    ID: 4,
-    name: "Firma 4",
-  }, {
-    ID: 5,
-    name: "Firma 5",
-  },
-  ]
+  const [isLoading, setLoading] = useState(true);
+  const { getAllCompanies } = useCompanies();
+  const [companies, setComapnies] = useState([]);
+
+  useEffect(() => {
+    if (isLoading) {
+      getAllCompanies()
+        .then((data) => {
+          if (!!data.companies) {
+            setComapnies(data.comapnies);
+          }
+          setLoading(false);
+        })
+        .catch(error => {
+          setComapnies([{
+            ID: 0,
+            name: "Firma 0",
+          }, {
+            ID: 1,
+            name: "Firma 1",
+          }, {
+            ID: 2,
+            name: "Firma 2",
+          }, {
+            ID: 3,
+            name: "Firma 3",
+          }, {
+            ID: 4,
+            name: "Firma 4",
+          }, {
+            ID: 5,
+            name: "Firma 5",
+          },
+          ])
+          NotificationManager.error("Nie udało sie pobrać danych", "Error!");
+          setLoading(false);
+        })
+    }
+  }, [isLoading])
+
+  if(!!isLoading){
+    return (<LoaderComponent></LoaderComponent>)
+  }
 
   return (
     <div>
