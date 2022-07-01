@@ -81,11 +81,11 @@ function generateToken(user) {
 
 async function login(json_data){
     
-    if(!json_data.hasOwnProperty("username")){
+    if(!json_data.hasOwnProperty("login")){
         return {
             "success": false,
             "status_code": 400,
-            "message": "'username' field required."
+            "message": "'login' field required."
         }
     }
     if(!json_data.hasOwnProperty("password")){
@@ -95,7 +95,7 @@ async function login(json_data){
             "message": "'password' field required."
         }
     }
-    let user = await userService.authenticateAndGetUser(json_data.username, json_data.password);
+    let user = await userService.authenticateAndGetUser(json_data.login, json_data.password);
     if(user==null){
         return {
             "success": false,

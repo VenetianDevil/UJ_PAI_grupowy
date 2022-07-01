@@ -30,10 +30,10 @@ Your id is: ${req.user_id}.
 })
 
 // serwowanie static frontendu
-app.use(express.static(path.join(__dirname, "..", "build")))
+/*app.use(express.static(path.join(__dirname, "..", "build")))
   .use((req, res, next) => {
     res.sendFile(path.join(__dirname, "..", "build", "index.html"));
-  });
+  });*/
 
 app.listen(PORT, () => {
   console.log('Exam app listening on port ' + PORT + ' !');

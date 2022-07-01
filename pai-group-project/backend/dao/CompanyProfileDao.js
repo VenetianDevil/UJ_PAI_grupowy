@@ -21,7 +21,7 @@ function isEmailValid(email) {
 }
 
 async function mParseJsonCompany(json_in){
-    const required_fields = ["email"]
+    /*const required_fields = ["email"]
     for(let f of required_fields){
         if(!json_in.hasOwnProperty(f)){
             return {
@@ -30,9 +30,9 @@ async function mParseJsonCompany(json_in){
                 "message": `User data must have a string field '${f}'`
             }
         }
-    }
+    }*/
 
-    if(await isEmailTaken(json_in.email)){
+    if(await isEmailTaken(json_in.email) || json_in.hasOwnProperty("email")){
         return {
             "success":false,
             "status_code":409,
@@ -40,7 +40,7 @@ async function mParseJsonCompany(json_in){
         }
     }
 
-    if(!isEmailValid(json_in.email)){
+    if(!isEmailValid(json_in.email) || json_in.hasOwnProperty("email")){
         return {
             "success":false,
             "status_code": 400,

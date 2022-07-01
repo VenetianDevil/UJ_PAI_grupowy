@@ -29,15 +29,15 @@ async function getUserById(user_id) {
     }
 }
 
-async function getUserByUsername(username) {
+async function getUserByUsername(login) {
     return await User.findOne({
-        where: {username}
+        where: {login: login}
     })
 }
 
-async function getUserByUsernameAndPassword(username, password) {
+async function getUserByUsernameAndPassword(login, password) {
     return await User.findOne({
-        where: {username, password}
+        where: {login: login, password: password}
     })
 }
 
@@ -92,7 +92,7 @@ async function mParseJson(json_in){
         return {
             "success":false,
             "status_code":400,
-            "message": "Too short username."
+            "message": "Too short login."
         }
     }
 
@@ -126,10 +126,18 @@ async function mParseJson(json_in){
 async function createUser(json_in){
     let user_r = await mParseJson(json_in);
     if(user_r.success){
-        user_r.user = await user_r.user.save();
+        user_r.user = user_r.user.save();
     }
-    user_r.user = getUserByUsername(user_r.user.login);
-    json_in.id = user_r.user.id;
+    else{
+        return user_r;
+    }
+    user_r = await User.findOne({
+        order: [
+            ['createdAt', 'DESC']
+        ],
+    });
+
+    json_in.id = user_r.id;
     let user_p;
     if (json_in.type === 1){
         user_p = await UserProfileDao.mParseJsonUser(json_in);
@@ -138,6 +146,9 @@ async function createUser(json_in){
         user_p = await CompanyProfileDao.mParseJsonCompany(json_in);
     }
 
+    if(user_p.success){
+        user_p.user = user_p.user.save();
+    }
     return user_p;
 }
 

@@ -4,7 +4,7 @@ const UserProfile = require("../models/UserProfile");
 
 async function getUserByEmail(email) {
     return await UserProfile.findOne({
-        where: {email}
+        where: {email:email}
     })
 }
 
@@ -21,7 +21,7 @@ function isEmailValid(email) {
 }
 
 async function mParseJsonUser(json_in){
-    const required_fields = ["email"]
+    /*const required_fields = ["email"]
     for(let f of required_fields){
         if(!json_in.hasOwnProperty(f)){
             return {
@@ -30,9 +30,9 @@ async function mParseJsonUser(json_in){
                 "message": `User data must have a string field '${f}'`
             }
         }
-    }
-
-    if(await isEmailTaken(json_in.email)){
+    }*/
+    console.log(json_in)
+    if(json_in.hasOwnProperty("email") && await isEmailTaken(json_in.email)){
         return {
             "success":false,
             "status_code":409,
@@ -41,7 +41,7 @@ async function mParseJsonUser(json_in){
     }
 
 
-    if(!isEmailValid(json_in.email)){
+    if(json_in.hasOwnProperty("email") && !isEmailValid(json_in.email)){
         return {
             "success":false,
             "status_code": 400,

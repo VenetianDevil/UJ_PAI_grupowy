@@ -14,6 +14,7 @@ async function authenticate(username, password) {
 
 async function authenticateAndGetUser(username, password) {
     const user = await userDao.getUserByUsername(username);
+    console.log(user);
     if(user == null) {
         return null;
     }

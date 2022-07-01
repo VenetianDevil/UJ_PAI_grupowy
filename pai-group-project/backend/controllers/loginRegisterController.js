@@ -13,7 +13,7 @@ const{onClientError, onServerError} = require("./errorHandler");
 router.use(express.json())
 
 router.post('/register', (req, res) => {
-
+    console.log(req.body)
     userDao.createUser(req.body, false).then(user_r => {
         if(user_r.success){
             let created_user = user_r.user;
