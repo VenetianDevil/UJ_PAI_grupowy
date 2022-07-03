@@ -30,21 +30,21 @@ function Login() {
       setLoading(true);
       setPassword("");
       // console.log(username, password);
-      signIn({ username, password })
+      signIn({ login: username, password })
         .then((res) => {
-          if (!!res.user) {
-            let user = res.user;
+          if (!!res.user_data) {
+            let user = res.user_data;
             user.token = res.token
             saveUser(user);
           } else {
-            NotificationManager.error("Logowanie nie udało się", "Error!");
+            if (res.detail) {
+              NotificationManager.error(res.detail, "Błąd!");
+            } else {
+              NotificationManager.error("Logowanie nie udało się", "Error!");
+            }
           }
-          // setLoading(false);
-          // if (res) {
-          //   navigate("/", { replace: true });
-          // } else {
-          //   // NotificationManager.error('Username and/or password are inncorect', 'Error!');
-          // }
+          setLoading(false);
+          e.target.reset();
         })
         .catch((error) => {
           NotificationManager.error(error.message, 'Error!');

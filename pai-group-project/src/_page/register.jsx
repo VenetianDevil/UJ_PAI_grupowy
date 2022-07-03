@@ -34,24 +34,24 @@ function Register(props) {
       console.log({ username, password, isCompany })
       signUp({ login: username, password, type: isCompany ? 2 : 1 })
         .then((res) => {
-          if (!!res.user) {
-            let user = res.user;
+          if (!!res.user_data) {
+            let user = res.user_data;
             user.token = res.token;
             saveUser(user);
             // setLoading(false);
+            if (res.detail) {
+              NotificationManager.success(res.detail, "Sukces!");
+            }
           } else {
-            NotificationManager.error("Rejestracja nie udała się", "Error!");
+            if (res.detail) {
+              NotificationManager.error(res.detail, "Błąd!");
+            } else {
+              NotificationManager.error("Rejestracja nie udała się", "Błąd!");
+            }
           }
         })
         .catch(error => {
-          saveUser({
-            ID: 0,
-            login: "test",
-            type: isCompany ? 2 : 1,
-            token: "token"
-          })
           NotificationManager.error(error.message, 'Error!');
-
         })
     } else {
       NotificationManager.error("Password and password confirmation are not the same", "Error in data!");

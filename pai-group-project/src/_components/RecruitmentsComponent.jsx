@@ -23,7 +23,7 @@ function RecruitmentsComponent() {
     if (isLoading) { // && !!currentUserValue()
       // const request = currentUserValue().type == 1 ? getUserRecruitments : getCompanyRecruitments;
       const request = getUserRecruitments;
-      request(0) //currentUserValue().ID
+      request(0) //currentUserValue().id
         .then((data) => {
           if (!!data.user) {
             setRecruitments(data.recruitments);
