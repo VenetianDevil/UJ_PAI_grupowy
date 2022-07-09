@@ -32,7 +32,7 @@ async function mParseJsonCompany(json_in){
         }
     }*/
 
-    if(await isEmailTaken(json_in.email) || json_in.hasOwnProperty("email")){
+    if(json_in.hasOwnProperty("email") && await isEmailTaken(json_in.email)){
         return {
             "success":false,
             "status_code":409,
@@ -40,7 +40,7 @@ async function mParseJsonCompany(json_in){
         }
     }
 
-    if(!isEmailValid(json_in.email) || json_in.hasOwnProperty("email")){
+    if(json_in.hasOwnProperty("email") && !isEmailValid(json_in.email) ){
         return {
             "success":false,
             "status_code": 400,

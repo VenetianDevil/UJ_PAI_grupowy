@@ -26,7 +26,8 @@ async function authenticateAndGetUser(username, password) {
 function getUserData(user_in){
     return {
         "id":user_in.id,
-        "login": user_in.login
+        "login": user_in.login,
+        "type": user_in.type
     }
 }
 
