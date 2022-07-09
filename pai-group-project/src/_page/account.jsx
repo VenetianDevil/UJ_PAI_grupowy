@@ -25,7 +25,7 @@ function Account() {
   useEffect(() => {
     if (isLoading) {
       if (!!currentUserValue()) {
-        getUser(currentUserValue().ID)
+        getUser(currentUserValue().id)
           .then((data) => {
             if (!!data.user) {
               setUser(data.user);

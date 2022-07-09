@@ -17,7 +17,7 @@ export default function OfferModalComponent(props) {
 
   function apply() {
     setDisableButton(true)
-    applyForAJob({ offerID: jobOffer.ID, userID: currentUserValue().ID })
+    applyForAJob({ offerID: jobOffer.ID, userID: currentUserValue().id })
       .then((data) => {
         NotificationManager.success("Złożyłeś podanie o pracę", "Sukces!");
         setDisableButton(false)

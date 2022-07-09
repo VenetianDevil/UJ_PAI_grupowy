@@ -27,7 +27,7 @@ export default function AddOfferModalComponent(props) {
   const handleChangeDebounce = _.debounce(handleChange, 500);
 
   function createOffer() {
-    jobOffer.companyID = currentUserValue().ID;
+    jobOffer.companyID = currentUserValue().id;
     
     addOffer(jobOffer)
       .then(data => {
