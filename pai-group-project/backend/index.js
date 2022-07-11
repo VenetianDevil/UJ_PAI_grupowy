@@ -17,6 +17,7 @@ db.authenticate()
 app.use(cors())
 
 app.use('/api/auth', require('./controllers/loginRegisterController'));
+app.use('/api/offers', require('./controllers/offersRoutes'));
 
 
 const jwtService = require("./services/jwtService");

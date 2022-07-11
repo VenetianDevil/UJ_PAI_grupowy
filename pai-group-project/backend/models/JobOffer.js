@@ -35,7 +35,8 @@ JobOffers.init({
         allowNull: true,
     },
     info: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     offerURL: {
         type: DataTypes.INTEGER,
@@ -57,7 +58,7 @@ JobOffers.init({
 },
 {
     sequelize:db,
-    timestamps:false,
+    timestamps:true,
 });
 
 JobOffers.sync();
