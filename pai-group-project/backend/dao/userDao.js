@@ -126,18 +126,18 @@ async function mParseJson(json_in){
 async function createUser(json_in){
     let user_r = await mParseJson(json_in);
     if(user_r.success){
-        user_r.user = user_r.user.save();
+        user_r.user = await user_r.user.save();
     }
     else{
         return user_r;
     }
-    user_r = await User.findOne({
+    let user = await User.findOne({
         order: [
             ['createdAt', 'DESC']
         ],
     });
 
-    json_in.id = user_r.id;
+    json_in.id = user.id;
     let user_p;
     if (json_in.type === 1){
         user_p = await UserProfileDao.mParseJsonUser(json_in);
@@ -147,9 +147,9 @@ async function createUser(json_in){
     }
 
     if(user_p.success){
-        user_p.user = user_p.user.save();
+        user_p.user = await user_p.user.save();
     }
-    return user_p;
+    return user_r;
 }
 
 async function updateUser(user_id, json_in){
