@@ -1,6 +1,9 @@
 'use strict';
 
 const CompanyProfile = require("../models/CompanyProfile");
+//const JobOffer = require("../models/JobOffer");
+const {Sequelize} = require("sequelize");
+const JobOffer = require("../models/JobOffer");
 
 async function getUserByEmail(email) {
     return await CompanyProfile.findOne({
@@ -17,6 +20,44 @@ async function isEmailTaken(email) {
 function isEmailValid(email) {
     const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     return !!email.match(validRegex);
+
+}
+async function getBestCompanies() {
+    let offers = await CompanyProfile.findAll({ order: Sequelize.literal('rand()'), limit: 5 })
+    if(offers==null){
+        return {
+            "success":false,
+            "status_code":404,
+            "message":`Offers not found`
+        }
+    }
+
+    return {
+        "success": true,
+        "offer": offers
+    }
+
+}
+
+async function getAllCompanies() {
+    return {"companies": await CompanyProfile.findAll()};
+}
+
+async function getCompanyOffers(companyID) {
+
+    let offers = await CompanyProfile.findAll({ order: Sequelize.literal('rand()'), limit: 5 })
+    if(offers==null){
+        return {
+            "success":false,
+            "status_code":404,
+            "message":`Offers not found`
+        }
+    }
+
+    return {
+        "success": true,
+        "offer": offers
+    }
 
 }
 
@@ -65,5 +106,5 @@ async function mParseJsonCompany(json_in){
 }
 
 module.exports = {
-    mParseJsonCompany: mParseJsonCompany,
+     getBestCompanies,getAllCompanies
 }

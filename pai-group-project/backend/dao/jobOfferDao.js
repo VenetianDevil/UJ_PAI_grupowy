@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const UserProfileDao = require("./UserProfileDao");
 const CompanyProfileDao = require("./CompanyProfileDao");
+const {Sequelize} = require("sequelize");
 
 async function getAllOffers() {
     return {"offers": await JobOffer.findAll()};
@@ -62,6 +63,41 @@ async function getOfferByID(offerID) {
 
 }
 
+async function getBestOffers() {
+    let offers = await JobOffer.findAll({ order: Sequelize.literal('rand()'), limit: 5 })
+    if(offers==null){
+        return {
+            "success":false,
+            "status_code":404,
+            "message":`Offers not found`
+        }
+    }
+
+    return {
+        "success": true,
+        "offer": offers
+    }
+
+}
+async function getCompanyOffers(companyID) {
+    let companyOffers = await JobOffer.findAll({
+            where : {
+                companyID: companyID
+            }
+        })
+    if(companyOffers==null || companyOffers.length === 0){
+        return {
+            "success":false,
+            "status_code":404,
+            "message": `Offers with companyID ${companyID} not found.`
+        }
+    }
+
+    return {
+        "success": true,
+        "offers": companyOffers,
+    }
+}
 module.exports = {
-    getOfferByID, getAllOffers, createOffer
+    getOfferByID, getAllOffers, createOffer, getBestOffers, getCompanyOffers
 }

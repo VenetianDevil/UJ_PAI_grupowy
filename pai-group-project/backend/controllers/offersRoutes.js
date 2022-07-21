@@ -12,6 +12,20 @@ const{onClientError, onServerError} = require("./errorHandler");
 
 router.use(express.json())
 
+router.get('/best-offers', (req, res) => {
+    let offerID = req.params.offerID
+
+    jobOfferDao.getBestOffers().then(offer_r => {
+            if(offer_r.success){
+                res.status(200).json(offer_r.offer)
+            }
+            else{
+                onClientError(res, offer_r.status_code, offer_r.message)
+            }
+        }
+    ).catch(err => onServerError(res, err));
+});
+
 router.get('"/bulk-offer/:offerID(\\d+)"', (req, res) => {
     let offerID = req.params.offerID
 
@@ -22,6 +36,20 @@ router.get('"/bulk-offer/:offerID(\\d+)"', (req, res) => {
         else{
             onClientError(res, offer_r.status_code, offer_r.message)
         }
+        }
+    ).catch(err => onServerError(res, err));
+});
+
+router.get('"/bulk-offer/:offerID(\\d+)"', (req, res) => {
+    let offerID = req.params.offerID
+
+    jobOfferDao.getOfferByID(offerID).then(offer_r => {
+            if(offer_r.success){
+                res.status(200).json(offer_r.offer)
+            }
+            else{
+                onClientError(res, offer_r.status_code, offer_r.message)
+            }
         }
     ).catch(err => onServerError(res, err));
 });
