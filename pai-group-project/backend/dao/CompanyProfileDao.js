@@ -1,14 +1,18 @@
 'use strict';
 
 const CompanyProfile = require("../models/CompanyProfile");
-//const JobOffer = require("../models/JobOffer");
 const {Sequelize} = require("sequelize");
 const JobOffer = require("../models/JobOffer");
+const UserProfile = require("../models/UserProfile");
 
 async function getUserByEmail(email) {
     return await CompanyProfile.findOne({
         where: {email}
     })
+}
+
+async function getCompanyByID(companyID) {
+    return await CompanyProfile.findByPk(companyID)
 }
 
 async function isEmailTaken(email) {
@@ -23,7 +27,7 @@ function isEmailValid(email) {
 
 }
 async function getBestCompanies() {
-    let offers = await CompanyProfile.findAll({ order: Sequelize.literal('rand()'), limit: 5 })
+    let offers = await CompanyProfile.findAll({ order: Sequelize.literal('random()'), limit: 5 })
     if(offers==null){
         return {
             "success":false,
@@ -45,7 +49,9 @@ async function getAllCompanies() {
 
 async function getCompanyOffers(companyID) {
 
-    let offers = await CompanyProfile.findAll({ order: Sequelize.literal('rand()'), limit: 5 })
+    let offers = await JobOffer.findAll({
+        where : {companyID : companyID}
+    })
     if(offers==null){
         return {
             "success":false,
@@ -59,6 +65,28 @@ async function getCompanyOffers(companyID) {
         "offer": offers
     }
 
+}
+
+async function updateCompanyProfileById(id, json_in) {
+    let user = await CompanyProfile.update(json_in,
+        {
+            where: {
+                companyID: id
+            }
+        });
+    if(user==null){
+        return {
+            "success":false,
+            "status_code":404,
+            "message": `Company Profile with id ${id} not found.`
+        }
+    }
+    else{
+        return {
+            "success":true,
+            "user": user
+        }
+    }
 }
 
 async function mParseJsonCompany(json_in){
@@ -106,5 +134,5 @@ async function mParseJsonCompany(json_in){
 }
 
 module.exports = {
-     getBestCompanies,getAllCompanies
+    mParseJsonCompany, getBestCompanies, getAllCompanies, getCompanyOffers, updateCompanyProfileById, getCompanyByID
 }

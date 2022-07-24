@@ -1,11 +1,17 @@
 'use strict';
 
 const UserProfile = require("../models/UserProfile");
+const CompanyProfile = require("../models/CompanyProfile");
+const User = require("../models/User");
 
 async function getUserByEmail(email) {
     return await UserProfile.findOne({
         where: {email:email}
     })
+}
+
+async function getUserByID(userID) {
+    return await UserProfile.findByPk(userID)
 }
 
 async function isEmailTaken(email) {
@@ -20,17 +26,31 @@ function isEmailValid(email) {
 
 }
 
-async function mParseJsonUser(json_in){
-    /*const required_fields = ["email"]
-    for(let f of required_fields){
-        if(!json_in.hasOwnProperty(f)){
-            return {
-                "success":false,
-                "status_code": 400,
-                "message": `User data must have a string field '${f}'`
+async function updateUserProfileById(id, json_in) {
+    console.log(id)
+    console.log("jestem tu")
+    let user = await UserProfile.update(json_in,
+        {
+            where: {
+                userID: id
             }
+        });
+    if(user==null){
+        return {
+            "success":false,
+            "status_code":404,
+            "message": `User Profile with id ${id} not found.`
         }
-    }*/
+    }
+    else{
+        return {
+            "success":true,
+            "user": user
+        }
+    }
+}
+async function mParseJsonUser(json_in){
+
     console.log(json_in)
     if(json_in.hasOwnProperty("email") && await isEmailTaken(json_in.email)){
         return {
@@ -39,7 +59,6 @@ async function mParseJsonUser(json_in){
             "message": `The email '${json_in.email}' is already taken.`
         }
     }
-
 
     if(json_in.hasOwnProperty("email") && !isEmailValid(json_in.email)){
         return {
@@ -69,5 +88,5 @@ async function mParseJsonUser(json_in){
 }
 
 module.exports = {
-    mParseJsonUser,
+    mParseJsonUser, updateUserProfileById, getUserByID
 }

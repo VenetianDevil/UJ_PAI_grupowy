@@ -69,7 +69,6 @@ function mVerifyToken(req, res, next) {
     }
 }
 
-
 function verifyToken(req, res, next){
     mVerifyToken(req, res, next, false);
 }

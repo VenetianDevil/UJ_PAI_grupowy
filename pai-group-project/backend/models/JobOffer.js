@@ -26,7 +26,7 @@ JobOffers.init({
         allowNull: false
     },
     workMode: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
 
@@ -41,10 +41,6 @@ JobOffers.init({
     offerURL: {
         type: DataTypes.INTEGER,
         allowNull: true,
-    },
-    end_date: {
-        type: DataTypes.TIME,
-        allowNull: false,
     },
     createdAt:{
         type:DataTypes.DATE,

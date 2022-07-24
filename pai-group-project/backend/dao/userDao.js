@@ -11,14 +11,13 @@ async function getAllUsers() {
     return await User.findAll();
 }
 
-async function getUserById(user_id) {
-
-    let user = await User.findByPk(user_id);
+async function getUserById(id) {
+    let user = await User.findByPk(id);
     if(user==null){
         return {
             "success":false,
             "status_code":404,
-            "message": `User with id ${user_id} not found.`
+            "message": `User with id ${id} not found.`
         }
     }
     else{
@@ -26,6 +25,53 @@ async function getUserById(user_id) {
             "success":true,
             "user": user
         }
+    }
+}
+
+async function updateUserById(id, json_in) {
+    let user = await User.update(json_in,
+        {
+            where: {
+                id: id
+            }
+        });
+    if(user==null){
+        return {
+            "success":false,
+            "status_code":404,
+            "message": `User with id ${id} not found.`
+        }
+    }
+    else{
+        return {
+            "success":true,
+            "user": user
+        }
+    }
+}
+
+
+async function getUserTypeData(user_id) {
+
+    let user = await User.findByPk(user_id);
+
+    if(user==null){
+        return {
+            "success":false,
+            "status_code":404,
+            "message": `User with id ${user_id} not found.`
+        }
+    }
+
+    if (user.type === 1){
+        user = UserProfile.findByPk(user_id)
+    }
+    else{
+        user = CompanyProfile.findByPk(user_id)
+    }
+    return {
+        "success":true,
+        "user": user
     }
 }
 
@@ -131,13 +177,8 @@ async function createUser(json_in){
     else{
         return user_r;
     }
-    let user = await User.findOne({
-        order: [
-            ['createdAt', 'DESC']
-        ],
-    });
 
-    json_in.id = user.id;
+    json_in.id = user_r.user.id;
     let user_p;
     if (json_in.type === 1){
         user_p = await UserProfileDao.mParseJsonUser(json_in);
@@ -151,38 +192,39 @@ async function createUser(json_in){
     }
     return user_r;
 }
+async function updateUserFields(user, json_in){
+    const required_fields = ["password", "login", "type"]
+    for(let f of required_fields){
+        if(json_in.hasOwnProperty(f) && json_in[f]){
+            user[f] = json_in[f]
+        }
+    }
+    return user
+}
+async function updateUser(json_in){
+    let user_id = json_in.id
+    let user_r = await getUserById(user_id)
 
-async function updateUser(user_id, json_in){
-    let user_r = await mParseJson(json_in);
+    if(!user_r.success){
+        return await mParseJson(json_in);
+    }
+    await updateUserById(json_in.id, json_in);
     let user_p;
-    json_in.id = user_id;
-    if (user_r.type === 1){
-        user_p = UserProfileDao.mParseJsonUser(json_in);
+    if (user_r.user.type === 1){
+        user_p = await UserProfileDao.updateUserProfileById(user_id, json_in)
     }
     else{
-        user_p = CompanyProfileDao.mParseJsonCompany(json_in);
+        user_p = await CompanyProfileDao.updateCompanyProfileById(user_id, json_in)
     }
 
-    if(!user_r.success)return user_r;
-
-    user_r.user.id = user_id;
     user_r.status_code = 201;
 
-    let previous_user_r = await getUserById(user_id);
-    if(previous_user_r.success){
-        user_r.status_code = 200;
 
-        let previous_user = previous_user_r.user;
-        user_r.user.createdAt = previous_user.createdAt;
-        
-        await deleteUserById(user_id);
-    }
-
-    user_r.user = await user_r.user.save();
-    user_p.user = await  user_p.user.save();
+    //user_r.user = await user_r.user.save();
+    //user_p.user = await  user_p.user.save();
     return user_p;
 }
 
 module.exports = {
-    getAllUsers, getUserById, getUserByUsername, deleteUserById, updateUser, createUser, getUserByUsernameAndPassword
+    getAllUsers, getUserById, getUserByUsername, deleteUserById, updateUser, createUser, getUserByUsernameAndPassword, getUserTypeData
 }

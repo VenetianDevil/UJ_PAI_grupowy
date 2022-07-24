@@ -12,7 +12,7 @@ async function getAllOffers() {
 }
 
 async function mParseJson(json_in){
-    const required_fields = ["companyID", "address", "categories", "workMode", "end_date"]
+    const required_fields = ["companyID", "address", "categories", "workMode"]
     for(let f of required_fields){
         if(!json_in.hasOwnProperty(f)){
             return {
@@ -64,7 +64,7 @@ async function getOfferByID(offerID) {
 }
 
 async function getBestOffers() {
-    let offers = await JobOffer.findAll({ order: Sequelize.literal('rand()'), limit: 5 })
+    let offers = await JobOffer.findAll({ order: Sequelize.literal('random()'), limit: 5 })
     if(offers==null){
         return {
             "success":false,

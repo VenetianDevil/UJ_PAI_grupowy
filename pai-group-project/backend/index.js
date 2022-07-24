@@ -18,6 +18,9 @@ app.use(cors())
 
 app.use('/api/auth', require('./controllers/loginRegisterController'));
 app.use('/api/offers', require('./controllers/offersRoutes'));
+app.use('/api/recruitments', require('./controllers/recruitmentsRoutes'));
+app.use('/api/users', require('./controllers/userRoutes'));
+app.use('/api/companies', require('./controllers/CompanyProfileRoutes'));
 
 
 const jwtService = require("./services/jwtService");
