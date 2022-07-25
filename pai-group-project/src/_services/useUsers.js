@@ -4,7 +4,7 @@ function useUsers() {
   const [request] = useServerService();
 
   function getUser(userID) {
-    return request('GET', `/user/${userID}`); //user albo company
+    return request('GET', `/users/user/${userID}`); //user albo company
   }
 
   function addUser(user) {
@@ -16,7 +16,7 @@ function useUsers() {
   }
 
   function getUserRecruitments(userID) {
-    return request('GET', `/user/${userID}/recruitmets`); //szukanie po userID
+    return request('GET', `/recruitments/user/${userID}/recruitmets`); //szukanie po userID
   }
 
   function updateUserRecruitment(recruitmentID, data) {

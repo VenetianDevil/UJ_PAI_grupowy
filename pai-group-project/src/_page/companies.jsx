@@ -15,32 +15,32 @@ function Companies() {
     if (isLoading) {
       getAllCompanies()
         .then((data) => {
-          if (!!data.companies) {
-            setComapnies(data.comapnies);
+          if (!!data) {
+            setComapnies(data);
           }
           setLoading(false);
         })
         .catch(error => {
-          setComapnies([{
-            ID: 0,
-            name: "Firma 0",
-          }, {
-            ID: 1,
-            name: "Firma 1",
-          }, {
-            ID: 2,
-            name: "Firma 2",
-          }, {
-            ID: 3,
-            name: "Firma 3",
-          }, {
-            ID: 4,
-            name: "Firma 4",
-          }, {
-            ID: 5,
-            name: "Firma 5",
-          },
-          ])
+          // setComapnies([{
+          //   ID: 0,
+          //   name: "Firma 0",
+          // }, {
+          //   ID: 1,
+          //   name: "Firma 1",
+          // }, {
+          //   ID: 2,
+          //   name: "Firma 2",
+          // }, {
+          //   ID: 3,
+          //   name: "Firma 3",
+          // }, {
+          //   ID: 4,
+          //   name: "Firma 4",
+          // }, {
+          //   ID: 5,
+          //   name: "Firma 5",
+          // },
+          // ])
           NotificationManager.error("Nie udało sie pobrać danych", "Error!");
           setLoading(false);
         })
