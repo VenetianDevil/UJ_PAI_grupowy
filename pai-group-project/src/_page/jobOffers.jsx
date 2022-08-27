@@ -17,32 +17,32 @@ function JobOffers() {
     if (isLoading) {
       getAllOffer()
         .then((data) => {
-          if (!!data.offers) {
-            setJobOffers(data.offers);
+          if (!!data) {
+            setJobOffers(data);
           }
           setLoading(false);
         })
         .catch(error => {
-          setJobOffers([{
-            ID: 0,
-            title: "Oferta 0",
-          }, {
-            ID: 1,
-            title: "Oferta 1",
-          }, {
-            ID: 2,
-            title: "Oferta 2",
-          }, {
-            ID: 3,
-            title: "Oferta 3",
-          }, {
-            ID: 4,
-            title: "Oferta 4",
-          }, {
-            ID: 5,
-            title: "Oferta 5",
-          },
-          ])
+          // setJobOffers([{
+          //   ID: 0,
+          //   title: "Oferta 0",
+          // }, {
+          //   ID: 1,
+          //   title: "Oferta 1",
+          // }, {
+          //   ID: 2,
+          //   title: "Oferta 2",
+          // }, {
+          //   ID: 3,
+          //   title: "Oferta 3",
+          // }, {
+          //   ID: 4,
+          //   title: "Oferta 4",
+          // }, {
+          //   ID: 5,
+          //   title: "Oferta 5",
+          // },
+          // ])
           NotificationManager.error("Nie udało sie pobrać danych", "Error!");
           setLoading(false);
         })

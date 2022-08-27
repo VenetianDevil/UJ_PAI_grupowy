@@ -27,32 +27,32 @@ function Account() {
       if (!!currentUserValue()) {
         getUser(currentUserValue().id)
           .then((data) => {
-            if (!!data.user) {
-              setUser(data.user);
-              setNewUserData({ ID: data.user.ID })
+            if (!!data) {
+              setUser(data);
+              setNewUserData({ id: data.id })
             }
             setLoading(false);
           })
           .catch(error => {
-            setUser({
-              ID: 0,
-              type: currentUserValue().type,
-              email: "dnaod@google.com",
-              imageUrl: "https://st2.depositphotos.com/1009634/7235/v/450/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
-              givenName: "Tomek", // user
-              familyName: "Kowalski", // user
-              phoneNumber: "123456789", // user
-              companyName: "Moja super firma", // company 
-              hqLocation: "Kraków", // company
-              info: "Jakiś opis profilu. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-              linkedIn: "https://www.linkedin.com/?trk=seo-authwall-base_nav-header-logo",
-              instagram: "https://www.instagram.com/",
-              github: "https://github.com/", // user
-              portfolioUrl: "https://www.instagram.com/", // user
-              cvPdfUrl: "https://api.ngo.pl/media/get/108219",
-              companyUrl: "https://www.ibm.com/pl-pl" // company
-            })
-            setNewUserData({ ID: 0 })
+            // setUser({
+            //   id: 38,
+            //   type: currentUserValue().type,
+            //   email: "dnaod@google.com",
+            //   imageUrl: "https://st2.depositphotos.com/1009634/7235/v/450/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
+            //   givenName: "Tomek", // user
+            //   familyName: "Kowalski", // user
+            //   phoneNumber: "123456789", // user
+            //   companyName: "Moja super firma", // company 
+            //   hqLocation: "Kraków", // company
+            //   info: "Jakiś opis profilu. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            //   linkedIn: "https://www.linkedin.com/?trk=seo-authwall-base_nav-header-logo",
+            //   instagram: "https://www.instagram.com/",
+            //   github: "https://github.com/", // user
+            //   portfolioUrl: "https://www.instagram.com/", // user
+            //   cvPdfUrl: "https://api.ngo.pl/media/get/108219",
+            //   companyUrl: "https://www.ibm.com/pl-pl" // company
+            // })
+            // setNewUserData({ id: 0 })
             NotificationManager.error("Nie udało sie pobrać danych", "Error!");
             setLoading(false);
           })
@@ -110,7 +110,7 @@ function Account() {
       <section className='mb-5'>
         <h2>Konto</h2>
         <div className="float-end" style={{ marginTop: "-40px" }}>{!editMode ? <Button type="button" onClick={startEditMode}>Edytuj</Button> : null} </div>
-        <Link className='w-100 text-center' to={`/profil/${user.ID}`}>Zobacz swój profil</Link>
+        <Link className='w-100 text-center' to={`/profil/${user.id}`}>Zobacz swój profil</Link>
 
         <Form id="accountForm" onSubmit={saveChanges}>
           <Row>
@@ -132,7 +132,7 @@ function Account() {
                 :
                 <Form.Group className="mb-3">
                   <Form.Label>Nazwa firmy *</Form.Label>
-                  <Form.Control id="companyName" type="text" placeholder="Family Name" defaultValue={user.companyName} onChange={e => handleChangeDebounce(e)} required disabled={!editMode} />
+                  <Form.Control id="companyName" type="text" placeholder="Company Name" defaultValue={user.companyName} onChange={e => handleChangeDebounce(e)} required disabled={!editMode} />
                 </Form.Group>
               }
               <Form.Group className="mb-3">
@@ -151,7 +151,7 @@ function Account() {
 
                 <Form.Group className="mb-3">
                   <Form.Label>Lokalizacja siedziby</Form.Label>
-                  <Form.Control id="hqLocation" type="phone" placeholder="123456789" defaultValue={user.hqLocation} onChange={e => handleChangeDebounce(e)} disabled={!editMode} />
+                  <Form.Control id="hqLocation" type="phone" placeholder="Rynek 1, 29-987 Kraków" defaultValue={user.hqLocation} onChange={e => handleChangeDebounce(e)} disabled={!editMode} />
                 </Form.Group>
 
               }
@@ -170,7 +170,7 @@ function Account() {
 
               <Form.Group className="mb-3">
                 <Form.Label>LinkedIn</Form.Label>
-                <Form.Control id="linkedIn" type="text" placeholder="https://www.linkedin.com/?trk=seo-authwall-base_nav-header-logo" defaultValue={user.linkedIn} onChange={e => handleChangeDebounce(e)} disabled={!editMode} />
+                <Form.Control id="linkedIn" type="text" placeholder="https://www.linkedin.com/" defaultValue={user.linkedIn} onChange={e => handleChangeDebounce(e)} disabled={!editMode} />
               </Form.Group>
 
 
@@ -221,7 +221,7 @@ function Account() {
         user.type == 2 ?
           <section>
             <Button className="position-absolute" onClick={openModal}>Dodaj nową ofertę</Button>
-            <OffersComponent companyID={user.ID}></OffersComponent>
+            <OffersComponent companyID={user.id}></OffersComponent>
             {modal.show ? <AddOfferModalComponent modal={modal} callback={closeModal}></AddOfferModalComponent> : null}
           </section>
           : null

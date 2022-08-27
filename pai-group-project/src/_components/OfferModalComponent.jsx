@@ -8,7 +8,7 @@ import { NotificationManager } from 'react-notifications';
 
 export default function OfferModalComponent(props) {
 
-  const { applyForAJob } = useOffers();
+  const { applyForAJob, workModes, remoteStates } = useOffers();
   const { isLoggedIn, currentUserValue } = useAuth();
   const [disableButton, setDisableButton] = useState(false);
   const modal = props.modal;
@@ -42,10 +42,11 @@ export default function OfferModalComponent(props) {
                 <Col xs={12} >
                   <p><b>Firma:</b> {jobOffer.companyName}</p>
                   <p><b>Miejsce pracy:</b> {jobOffer.address}</p>
-                  <p><b>Koniec rekrutacji:</b> {jobOffer.endDate}</p>
-                  <p><b>Etat:</b> {jobOffer.workMode}</p>
-                  <p><b>Tryb:</b> {jobOffer.remote}</p>
-                  <p><a target="_blank" href={jobOffer.officialOfferUrl} rel="nofollow">Link do oferty</a></p>
+                  {/* <p><b>Koniec rekrutacji:</b> {jobOffer.endDate}</p> */}
+                  <p><b>Etat:</b> {jobOffer.workMode ? workModes[jobOffer.workMode] : "nieokreślony"}</p>
+                  <p><b>Tryb:</b> {jobOffer.remote ? remoteStates[jobOffer.remote] : "nieokreślony"}</p>
+                  {jobOffer.officialOfferUrl ? 
+                  <p><a target="_blank" href={jobOffer.officialOfferUrl} rel="nofollow">Link do oferty</a></p> : null }
                   <p>{jobOffer.info}</p>
                 </Col>
 
