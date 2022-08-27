@@ -59,15 +59,13 @@ async function getRecruitmentById(id) {
 }
 async function getCompanyRecruitmentById(companyID) {
 
-    const [recruitments, metadata] = await sequelize.query(
-        "SELECT RECR.* FROM CompanyProfiles AS COMP JOIN JobOffers AS OFFERS ON COMP.companyID = OFFERS.companyID " +
-        "JOIN Recruitments AS RECR ON OFFERS.offerID = RECR.offerID " +
-        "WHERE COMP.companyID = :companyID",
-        {
-            replacements: { companyID: companyID },
-            type: QueryTypes.SELECT
-        }
-    );
+    const recruitments = await sequelize.query( "SELECT RECR.*,  OFFERS.title, OFFERS.address, OFFERS.categories, OFFERS.workMode, OFFERS.remote, OFFERS.offerInfo, OFFERS.offerURL, " +
+        "COMP.companyID, COMP.companyInfo, COMP.companyName, COMP.companyURL, COMP.email, COMP.imageURL, COMP.instagram, COMP.linkedIn " +
+        "FROM Recruitments AS RECR JOIN JobOffers AS OFFERS ON RECR.offerID = OFFERS.offerID " +
+        "JOIN CompanyProfiles AS COMP ON OFFERS.companyID = COMP.companyID" +
+        "  WHERE COMP.companyID = " + companyID,
+        {type: QueryTypes.SELECT})
+
     if(recruitments==null || typeof recruitments === "undefined"){
         return {
             "success":false,
@@ -84,7 +82,13 @@ async function getCompanyRecruitmentById(companyID) {
 }
 async function getUserRecruitmentById(userID) {
 
-    let recruitment = await recruitments.findOne({where: { userID: userID}});
+    let recruitment = await sequelize.query( "SELECT RECR.*,  OFFERS.title, OFFERS.address, OFFERS.categories, OFFERS.workMode, OFFERS.remote, OFFERS.offerInfo, OFFERS.offerURL, " +
+                                        "COMP.companyID, COMP.companyInfo, COMP.companyName, COMP.companyURL, COMP.email, COMP.imageURL, COMP.instagram, COMP.linkedIn " +
+                                        "FROM Recruitments AS RECR JOIN JobOffers AS OFFERS ON RECR.offerID = OFFERS.offerID " +
+                                        "JOIN CompanyProfiles AS COMP ON OFFERS.companyID = COMP.companyID" +
+                                        " WHERE RECR.userID = " + userID,
+        {type: QueryTypes.SELECT})
+
     if(recruitment===null || recruitment.length === 0){
         return {
             "success":false,

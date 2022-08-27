@@ -2,10 +2,7 @@
 
 const express = require('express')
 const router = express.Router()
-const jobOfferDao = require('../dao/jobOfferDao')
 const recruitmentsDao = require('../dao/recruitmentsDao')
-const jwtService = require('../services/jwtService')
-const userService = require('../services/userService')
 require('dotenv').config({ path: 'config/.env'})
 
 const{onClientError, onServerError} = require("./errorHandler");
@@ -17,7 +14,7 @@ router.post('/job-apply', (req, res) => {
 
     recruitmentsDao.createUserRecruitment(req.body).then(recruitment_r => {
             if(recruitment_r.success){
-                res.status(200).json(recruitment_r.offer)
+                res.status(200).json(recruitment_r.recruitment)
             }
             else{
                 onClientError(res, recruitment_r.status_code, recruitment_r.message)
@@ -50,7 +47,7 @@ router.put('/:recruitmentID', (req, res) => {
 
     recruitmentsDao.updateUserRecruitment(recruitmentID, req.body).then(recruitment_r_r => {
             if(recruitment_r_r.success){
-                res.status(200).json(recruitment_r_r.offer)
+                res.status(200).json(recruitment_r_r.recruitment)
             }
             else{
                 onClientError(res, recruitment_r_r.status_code, recruitment_r_r.message)

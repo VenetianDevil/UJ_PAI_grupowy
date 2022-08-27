@@ -3,8 +3,6 @@
 const express = require('express')
 const router = express.Router()
 const jobOfferDao = require('../dao/jobOfferDao')
-const jwtService = require('../services/jwtService')
-const userService = require('../services/userService')
 require('dotenv').config({ path: 'config/.env'})
 
 const{onClientError, onServerError} = require("./errorHandler");
@@ -42,7 +40,7 @@ router.get('/bulk-offer/:offerID', (req, res) => {
 router.get('/bulk-offer', (req, res) => {
     jobOfferDao.getAllOffers().then(offers_r => {
 
-        res.status(200).json(offers_r.offer)
+        res.status(200).json(offers_r.offers)
     }
     ).catch(err => onServerError(res, err));
 });

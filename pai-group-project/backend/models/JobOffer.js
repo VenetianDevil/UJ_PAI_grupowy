@@ -11,6 +11,10 @@ JobOffers.init({
         autoIncrement: true,
         primaryKey: true
     },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     companyID: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -34,7 +38,7 @@ JobOffers.init({
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    info: {
+    offerInfo: {
         type: DataTypes.STRING,
         allowNull: true,
     },

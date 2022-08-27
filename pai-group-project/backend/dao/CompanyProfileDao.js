@@ -1,9 +1,10 @@
 'use strict';
 
 const CompanyProfile = require("../models/CompanyProfile");
-const {Sequelize} = require("sequelize");
+const {Sequelize, QueryTypes} = require("sequelize");
 const JobOffer = require("../models/JobOffer");
 const UserProfile = require("../models/UserProfile");
+const sequelize = require("../config/database");
 
 async function getUserByEmail(email) {
     return await CompanyProfile.findOne({
@@ -27,8 +28,8 @@ function isEmailValid(email) {
 
 }
 async function getBestCompanies() {
-    let offers = await CompanyProfile.findAll({ order: Sequelize.literal('random()'), limit: 5 })
-    if(offers==null){
+    let companies = await CompanyProfile.findAll({ order: Sequelize.literal('random()'), limit: 5 })
+    if(companies==null){
         return {
             "success":false,
             "status_code":404,
@@ -38,7 +39,7 @@ async function getBestCompanies() {
 
     return {
         "success": true,
-        "offer": offers
+        "offer": companies
     }
 
 }
@@ -49,10 +50,13 @@ async function getAllCompanies() {
 
 async function getCompanyOffers(companyID) {
 
-    let offers = await JobOffer.findAll({
-        where : {companyID : companyID}
-    })
-    if(offers==null){
+    let companyOffers = await sequelize.query( "SELECT * FROM JobOffers AS OFFERS JOIN CompanyProfiles AS COMP ON OFFERS.companyID = COMP.companyID " +
+        "WHERE OFFERS.companyID = :companyID",
+        {
+            replacements: { companyID: companyID },
+            type: QueryTypes.SELECT
+        })
+    if(companyOffers==null){
         return {
             "success":false,
             "status_code":404,
@@ -62,7 +66,7 @@ async function getCompanyOffers(companyID) {
 
     return {
         "success": true,
-        "offer": offers
+        "offer": companyOffers
     }
 
 }
@@ -122,7 +126,7 @@ async function mParseJsonCompany(json_in){
         "companyName":json_in.companyName,
         "HQLocation":json_in.HQLocation,
         "imageURL":json_in.imageURL,
-        "info":json_in.info,
+        "companyInfo":json_in.info,
         "linkedIn":json_in.linkedIn,
         "instagram":json_in.instagram,
         "companyURL":json_in.companyURL});

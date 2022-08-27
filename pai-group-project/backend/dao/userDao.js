@@ -54,7 +54,7 @@ async function updateUserById(id, json_in) {
 async function getUserTypeData(user_id) {
 
     let user = await User.findByPk(user_id);
-
+    let userInfo
     if(user==null){
         return {
             "success":false,
@@ -64,14 +64,20 @@ async function getUserTypeData(user_id) {
     }
 
     if (user.type === 1){
-        user = UserProfile.findByPk(user_id)
+        userInfo = await UserProfile.findByPk(user_id)
     }
     else{
-        user = CompanyProfile.findByPk(user_id)
+        userInfo = await CompanyProfile.findByPk(user_id)
     }
+    userInfo = userInfo.dataValues
+    user = user.dataValues
+    let updatedAt = userInfo.updatedAt
+
+    let resUser = {...user, ...userInfo}
+    resUser.updatedAt = updatedAt
     return {
         "success":true,
-        "user": user
+        "user": resUser
     }
 }
 
@@ -211,18 +217,18 @@ async function updateUser(json_in){
     await updateUserById(json_in.id, json_in);
     let user_p;
     if (user_r.user.type === 1){
-        user_p = await UserProfileDao.updateUserProfileById(user_id, json_in)
+        await UserProfileDao.updateUserProfileById(user_id, json_in)
+        user_p = await UserProfileDao.getUserByID(user_id)
     }
     else{
-        user_p = await CompanyProfileDao.updateCompanyProfileById(user_id, json_in)
+        await CompanyProfileDao.updateCompanyProfileById(user_id, json_in)
+        user_p = await CompanyProfileDao.getCompanyByID(user_id)
     }
 
     user_r.status_code = 201;
 
-
-    //user_r.user = await user_r.user.save();
-    //user_p.user = await  user_p.user.save();
-    return user_p;
+    return {"success": true,
+            "user": user_p};
 }
 
 module.exports = {

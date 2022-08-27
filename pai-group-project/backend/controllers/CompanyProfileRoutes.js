@@ -2,10 +2,7 @@
 
 const express = require('express')
 const router = express.Router()
-const jobOfferDao = require('../dao/jobOfferDao')
 const companyProfileDao = require('../dao/CompanyProfileDao')
-const jwtService = require('../services/jwtService')
-const userService = require('../services/userService')
 require('dotenv').config({ path: 'config/.env'})
 
 const{onClientError, onServerError} = require("./errorHandler");
@@ -27,9 +24,9 @@ router.get('/best-companies', (req, res) => {
 });
 
 router.get('/companies', (req, res) => {
-    companyProfileDao.getAllCompanies().then(offers_r => {
+    companyProfileDao.getAllCompanies().then(companies_r => {
 
-            res.status(200).json(offers_r.offer)
+            res.status(200).json(companies_r.companies)
         }
     ).catch(err => onServerError(res, err));
 });

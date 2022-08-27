@@ -1,8 +1,6 @@
 'use strict';
 
 const UserProfile = require("../models/UserProfile");
-const CompanyProfile = require("../models/CompanyProfile");
-const User = require("../models/User");
 
 async function getUserByEmail(email) {
     return await UserProfile.findOne({
@@ -27,8 +25,6 @@ function isEmailValid(email) {
 }
 
 async function updateUserProfileById(id, json_in) {
-    console.log(id)
-    console.log("jestem tu")
     let user = await UserProfile.update(json_in,
         {
             where: {
