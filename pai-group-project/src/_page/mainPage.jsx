@@ -65,7 +65,7 @@ function MainPage() {
             <Col xs={12} sm={6} lg={3} className="mb-3">
               <div className='card jobOffer-card' key={offer.offerID}>
                 <h3>{offer.title}</h3>
-                <p>{offer.companyName || "Firma nieznana"}</p>
+                <p>{offer.companyName || "-NK-"}</p>
                 <Button onClick={() => openModal(offer)}>Zobacz</Button>
               </div>
             </Col>
@@ -78,8 +78,8 @@ function MainPage() {
           {companies.slice(0, 4).map(company =>
             <Col xs={12} sm={6} lg={3} className="mb-3">
               <div className='card company-card' key={company.companyID}>
-                <h3>{company.companyName || "-"}</h3>
-                <p>Kraków</p>
+                <h3>{company.companyName || "-NK-"}</h3>
+                <p>{company.HQLocation || "lokalizacja -nk-"}</p>
                 <Link to={`/profil/${company.companyID}`}><Button>Zobacz</Button></Link>
               </div>
             </Col>

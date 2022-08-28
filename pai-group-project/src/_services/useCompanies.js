@@ -20,7 +20,7 @@ function useCompanies() {
   }
   
   function getCompanyRecruitments(companyID){
-    return request('GET', `/companies/${companyID}/recruitments`); //szukanie po companyID
+    return request('GET', `/recruitments/companies/${companyID}/recruitments`); //szukanie po companyID
   }
 
   return { getBestCompanies, getAllCompanies, getCompany, getCompanyOffers, getCompanyRecruitments };

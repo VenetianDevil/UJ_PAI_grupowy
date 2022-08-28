@@ -60,9 +60,9 @@ function JobOffers() {
         <Row>
           {jobOffers.map(offer =>
             <Col xs={12} sm={6} lg={3} className="mb-3">
-              <div className='card jobOffer-card' key={offer.ID}>
+              <div className='card jobOffer-card' key={offer.offerID}>
                 <h3>{offer.title}</h3>
-                <p>Nazwa firmy</p>
+                <p>{offer.companyName}</p>
                 <Button onClick={() => openModal(offer)}>Zobacz</Button>
               </div>
             </Col>

@@ -7,7 +7,9 @@ import { LoaderComponent } from './LoaderComponent';
 import useUsers from '../_services/useUsers';
 import useCompanies from '../_services/useCompanies';
 import useAuth from '../_services/useAuth';
+import useOffers from '../_services/useOffers';
 import NotificationManager from 'react-notifications/lib/NotificationManager';
+import { format } from 'date-fns'
 var _ = require('lodash');
 
 function RecruitmentsComponent() {
@@ -18,44 +20,19 @@ function RecruitmentsComponent() {
   const [recruitments, setRecruitments] = useState();
   const { getUserRecruitments } = useUsers();
   const { getCompanyRecruitments } = useCompanies();
+  const { stages, status } = useOffers();
 
   useEffect(() => {
-    if (isLoading) { // && !!currentUserValue()
-      // const request = currentUserValue().type == 1 ? getUserRecruitments : getCompanyRecruitments;
-      const request = getUserRecruitments;
-      request(0) //currentUserValue().id
+    if (isLoading && !!currentUserValue()) {
+      const request = currentUserValue().type == 1 ? getUserRecruitments : getCompanyRecruitments;
+      request(currentUserValue().id)
         .then((data) => {
-          if (!!data.user) {
-            setRecruitments(data.recruitments);
+          if (!!data) {
+            setRecruitments(data);
           }
           setLoading(false);
         })
         .catch(error => {
-          setRecruitments([{
-            ID: 0,
-            offerID: 0,
-            companyId: 0,
-            companyName: "Super company",
-            title: "Super stanowisko",
-            address: "Karmelicka 20/90, Kraków",
-            stage: 1,
-            status: 3,
-            info: "Jakiś opis oferty. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            officialOfferUrl: "https://nofluffjobs.com/pl/job/remote-senior-ruby-on-rails-developer-htd-health-2bk4dw09",
-            date: "10-07-2022",
-          }, {
-            ID: 1,
-            offerID: 0,
-            companyId: 0,
-            companyName: "Super company",
-            title: "Super stanowisko",
-            address: "Karmelicka 20/90, Kraków",
-            stage: 1,
-            status: 3,
-            info: "Jakiś opis oferty. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            officialOfferUrl: "https://nofluffjobs.com/pl/job/remote-senior-ruby-on-rails-developer-htd-health-2bk4dw09",
-            date: "10-07-2022",
-          }])
           NotificationManager.error("Nie udało sie pobrać danych", "Error!");
           setLoading(false);
         })
@@ -85,15 +62,15 @@ function RecruitmentsComponent() {
         </thead>
         <tbody>
           {isLoading ? (<tr><td colSpan={8}><LoaderComponent></LoaderComponent></td></tr>) :
-          (!_.isEmpty(recruitments) ? recruitments.map(recruitment => <tr className="pointer" key={recruitment.ID} onClick={() => openModal(recruitment)}>
-            <td>{recruitment.ID}</td>
+          (!_.isEmpty(recruitments) ? recruitments.map(recruitment => <tr className="pointer" key={recruitment.RecruitmentID} onClick={() => openModal(recruitment)}>
+            <td>{recruitment.RecruitmentID}</td>
             <td>{recruitment.offerID}</td>
             <td>{recruitment.title}</td>
             <td>Jan Kowalski</td>
             <td>{recruitment.companyName}</td>
-            <td>{recruitment.stage}</td>
-            <td>{recruitment.status}</td>
-            <td>{recruitment.date}</td>
+            <td>{recruitment.stage ? stages[recruitment.stage] : "-"}</td>
+            <td>{recruitment.status ? status[recruitment.status] : "-"}</td>
+            <td>{format(new Date(recruitment.updatedAt), 'dd/MM/yyyy')}</td>
           </tr>) : <tr><td colSpan={8}>Brak rekrutacji</td></tr>)}
         </tbody>
       </Table>
