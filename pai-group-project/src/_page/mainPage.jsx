@@ -66,7 +66,7 @@ function MainPage() {
               <div className='card jobOffer-card' key={offer.offerID}>
                 <h3>{offer.title}</h3>
                 <p>{offer.companyName || "-NK-"}</p>
-                <Button onClick={() => openModal(offer)}>Zobacz</Button>
+                <Button id="jobOffer" onClick={() => openModal(offer)}>Zobacz</Button>
               </div>
             </Col>
           )}
@@ -80,7 +80,7 @@ function MainPage() {
               <div className='card company-card' key={company.companyID}>
                 <h3>{company.companyName || "-NK-"}</h3>
                 <p>{company.HQLocation || "lokalizacja -nk-"}</p>
-                <Link to={`/profil/${company.companyID}`}><Button>Zobacz</Button></Link>
+                <Link to={`/profil/${company.companyID}`}><Button id="jobOffer">Zobacz</Button></Link>
               </div>
             </Col>
           )}

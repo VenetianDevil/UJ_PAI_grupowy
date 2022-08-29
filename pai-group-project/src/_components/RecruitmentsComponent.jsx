@@ -12,7 +12,7 @@ import NotificationManager from 'react-notifications/lib/NotificationManager';
 import { format } from 'date-fns'
 var _ = require('lodash');
 
-function RecruitmentsComponent() {
+function RecruitmentsComponent(props) {
 
   const { currentUserValue } = useAuth();
   const [isLoading, setLoading] = useState(true);
@@ -63,10 +63,10 @@ function RecruitmentsComponent() {
         <tbody>
           {isLoading ? (<tr><td colSpan={8}><LoaderComponent></LoaderComponent></td></tr>) :
           (!_.isEmpty(recruitments) ? recruitments.map(recruitment => <tr className="pointer" key={recruitment.RecruitmentID} onClick={() => openModal(recruitment)}>
-            <td>{recruitment.RecruitmentID}</td>
+            <td id="recruitmentTable">{recruitment.RecruitmentID}</td>
             <td>{recruitment.offerID}</td>
             <td>{recruitment.title}</td>
-            <td>Jan Kowalski</td>
+            <td>{recruitment.userID}</td>
             <td>{recruitment.companyName}</td>
             <td>{recruitment.stage ? stages[recruitment.stage] : "-"}</td>
             <td>{recruitment.status ? status[recruitment.status] : "-"}</td>
@@ -74,7 +74,7 @@ function RecruitmentsComponent() {
           </tr>) : <tr><td colSpan={8}>Brak rekrutacji</td></tr>)}
         </tbody>
       </Table>
-      {modal.show ? <RecruitmentModalComponent modal={modal} callback={closeModal}></RecruitmentModalComponent> : null}
+      {modal.show ? <RecruitmentModalComponent modal={modal} callback={closeModal} givenName={props.givenName} familyName={props.familyName}></RecruitmentModalComponent> : null}
 
     </div>
   );

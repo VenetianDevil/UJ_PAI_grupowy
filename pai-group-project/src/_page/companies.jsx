@@ -41,7 +41,7 @@ function Companies() {
               <div className='card company-card' key={company.companyID}>
                 <h3>{company.companyName || "-NK-"}</h3>
                 <p>{company.HQLocation || "lokalizacja -nk-"}</p>
-                <Link to={`/profil/${company.companyID}`}><Button>Zobacz</Button></Link>
+                <Link to={`/profil/${company.companyID}`}><Button id="jobOffer">Zobacz</Button></Link>
               </div>
             </Col>
           )}

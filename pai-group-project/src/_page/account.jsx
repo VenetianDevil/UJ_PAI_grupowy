@@ -210,9 +210,9 @@ function Account() {
             </Col>
             <Col sm="12">
               <div className='float-end'>
-                {editMode ? <Button variant="danger" type="button" onClick={cancelEditMode} >Anuluj</Button> : null}
+                {editMode ? <Button id="cancel" variant="danger" type="button" onClick={cancelEditMode} >Anuluj</Button> : null}
                 &nbsp;
-                {editMode ? <Button variant="success" type="submit" form="accountForm" >Zapisz</Button> : null}
+                {editMode ? <Button id="save" variant="success" type="submit" form="accountForm" >Zapisz</Button> : null}
 
               </div>
             </Col>
@@ -234,7 +234,7 @@ function Account() {
       }
 
       <section>
-        <RecruitmentsComponent></RecruitmentsComponent>
+        <RecruitmentsComponent givenName={user.givenName} familyName={user.familyName}></RecruitmentsComponent>
       </section>
     </div >
   )

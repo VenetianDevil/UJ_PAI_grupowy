@@ -63,7 +63,7 @@ function JobOffers() {
               <div className='card jobOffer-card' key={offer.offerID}>
                 <h3>{offer.title}</h3>
                 <p>{offer.companyName}</p>
-                <Button onClick={() => openModal(offer)}>Zobacz</Button>
+                <Button id="jobOffer" onClick={() => openModal(offer)}>Zobacz</Button>
               </div>
             </Col>
           )}

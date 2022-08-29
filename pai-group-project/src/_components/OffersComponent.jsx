@@ -54,7 +54,7 @@ function OffersComponent(props) {
         <tbody>
           {isLoading ? (<tr><td colSpan={8}><LoaderComponent></LoaderComponent></td></tr>) :
             (!_.isEmpty(jobOffers) ? jobOffers.map(offer => <tr className="pointer" key={offer.offerID} onClick={() => openModal(offer)}>
-              <td>{offer.offerID}</td>
+              <td id="offerId">{offer.offerID}</td>
               <td>{offer.title}</td>
               <td>{offer.companyName}</td>
               <td>{offer.workMode ? workModes[offer.workMode-1] : "-"}</td>
