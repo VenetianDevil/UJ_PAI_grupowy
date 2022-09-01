@@ -68,7 +68,7 @@ export default function RecruitmentModalComponent(props) {
                 <Col xs={12} >
                   <Form onSubmit={saveChanges} id="recruitmentForm">
                     <p><b>Firma:</b> {recruitment.companyName}</p>
-                    <p><b>Kandydat:</b> Jan Kowalski</p>
+                    <p><b>Kandydat:</b> {props.givenName} {props.familyName}</p>
                     <p><b>Data złożenia podania:</b> {recruitment.date}</p>
                     <p><b className="float-start">Etap:</b> <Form.Select defaultValue={recruitment.stage} disabled={disable || disableForm} onChange={(e) => changeStage(e.target.value)} size="sm" className="w-auto">{/*0-złożona, 1-zaakceptwana, 2-W trakcie kwalifikacji, 3-Rozpatrzona*/}
                       {stages.map((stage, index) => (<option value={index}>{stage}</option>))}
