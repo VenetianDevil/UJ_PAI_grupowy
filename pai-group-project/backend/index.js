@@ -25,7 +25,6 @@ app.use('/api/companies', require('./controllers/CompanyProfileRoutes'));
 
 
 const jwtService = require("./services/jwtService");
-const { fstat } = require('fs');
 
 app.get('/api/hello', jwtService.verifyToken, (req, res)=>{
     let response = `
