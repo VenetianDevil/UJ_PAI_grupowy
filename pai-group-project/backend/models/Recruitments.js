@@ -21,11 +21,6 @@ Recruitments.init({
         allowNull: false,
     },
 
-    date: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-
     status:{
         type: DataTypes.INTEGER,
         allowNull: false,

@@ -25,7 +25,7 @@ CompanyProfiles.init({
         type: DataTypes.STRING,
         allowNull: true,
     },
-    info: {
+    companyInfo: {
         type: DataTypes.STRING,
         allowNull: true
     },

@@ -15,32 +15,12 @@ function Companies() {
     if (isLoading) {
       getAllCompanies()
         .then((data) => {
-          if (!!data.companies) {
-            setComapnies(data.comapnies);
+          if (!!data) {
+            setComapnies(data);
           }
           setLoading(false);
         })
         .catch(error => {
-          setComapnies([{
-            ID: 0,
-            name: "Firma 0",
-          }, {
-            ID: 1,
-            name: "Firma 1",
-          }, {
-            ID: 2,
-            name: "Firma 2",
-          }, {
-            ID: 3,
-            name: "Firma 3",
-          }, {
-            ID: 4,
-            name: "Firma 4",
-          }, {
-            ID: 5,
-            name: "Firma 5",
-          },
-          ])
           NotificationManager.error("Nie udało sie pobrać danych", "Error!");
           setLoading(false);
         })
@@ -58,10 +38,10 @@ function Companies() {
         <Row>
           {companies.map(company =>
             <Col xs={12} sm={6} lg={3} className="mb-3">
-              <div className='card company-card' key={company.ID}>
-                <h3>{company.name}</h3>
-                <p>Kraków</p>
-                <Link to={`/profil/${company.ID}`}><Button>Zobacz</Button></Link>
+              <div className='card company-card' key={company.companyID}>
+                <h3>{company.companyName || "-NK-"}</h3>
+                <p>{company.HQLocation || "lokalizacja -nk-"}</p>
+                <Link to={`/profil/${company.companyID}`}><Button id="jobOffer">Zobacz</Button></Link>
               </div>
             </Col>
           )}

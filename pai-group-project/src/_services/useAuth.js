@@ -9,22 +9,22 @@ function useAuth() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    console.log("-------------------------------------- auth effect ----------------------------------------");
+    // console.log("-------------------------------------- auth effect ----------------------------------------");
 
     if (!isLoggedIn) {
       if (!!localStorage.getItem('currentUser')) {
-        console.log('\tsetting values');
+        // console.log('\tsetting values');
         currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
         currentUser = currentUserSubject.asObservable();
         setIsLoggedIn(true);
-        console.log('\tsetting logged to true ');
+        // console.log('\tsetting logged to true ');
       } else {
-        console.log("nie mam currenUsera w localStorage / wylogowany");
+        // console.log("nie mam currenUsera w localStorage / wylogowany");
       }
 
-      console.log(currentUser);
+      // console.log(currentUser);
     } else {
-      console.log('auth, logged in', isLoggedIn);
+      // console.log('auth, logged in', isLoggedIn);
     }
 
   }, [isLoggedIn])
@@ -34,7 +34,7 @@ function useAuth() {
     console.log("-------------------------------------- SAVE USER ----------------------------------------");
     if (!!user) {
       if (!currentUserSubject) {
-        console.log('\tauth login proceed');
+        // console.log('\tauth login proceed');
         localStorage.setItem('currentUser', JSON.stringify(user));
         currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
         currentUserSubject.next(user);
@@ -48,8 +48,8 @@ function useAuth() {
   }
 
   function currentUserValue() {
-    console.log("-------------------------------------- CURENT USER VALUE ----------------------------------------");
-    console.log(currentUserSubject);
+    // console.log("-------------------------------------- CURENT USER VALUE ----------------------------------------");
+    // console.log(currentUserSubject);
 
     return currentUserSubject ? currentUserSubject.value : null;
   }

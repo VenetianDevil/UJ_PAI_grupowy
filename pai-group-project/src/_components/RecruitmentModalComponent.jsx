@@ -4,6 +4,7 @@ import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 import useAuth from '../_services/useAuth';
 import { LoaderComponent } from './LoaderComponent';
 import useUsers from '../_services/useUsers';
+import useOffers from '../_services/useOffers';
 import { NotificationManager } from 'react-notifications';
 
 export default function RecruitmentModalComponent(props) {
@@ -14,24 +15,27 @@ export default function RecruitmentModalComponent(props) {
   const [ disable ] = useState(!!currentUserValue() && currentUserValue().type == 1); //modyfikacja niedostępna dla zwykłego użytkownika, tylko firmy
   const [ disableForm, setDisableForm ] = useState(false);
   const [ recruitment, setRecruitment ] = useState(modal.data);
+  const { stages, status } = useOffers();
+
   var callback = props.callback;
 
   function resign() {
-    changeState(3);
+    // changeState(3);
+    recruitment.status = 3;
     updateRecruitment();
   }
   
   function changeStage(val) {
-    setRecruitment({ ...recruitment, stage: val })
+    setRecruitment({ ...recruitment, "stage": val });
   }
 
   function changeState(val) {
-    setRecruitment({ ...recruitment, state: val })
+    setRecruitment({ ...recruitment, "status": val });
   }
 
   function updateRecruitment() {
     setDisableForm(true);
-    updateUserRecruitment(recruitment.ID, { stage: recruitment.stage, state: recruitment.state })
+    updateUserRecruitment(recruitment.RecruitmentID, { stage: recruitment.stage, status: recruitment.status })
       .then(data => {
         setDisableForm(false);
         NotificationManager.success("Rekrutacja zaktualizowana", "Sukces!");
@@ -57,26 +61,20 @@ export default function RecruitmentModalComponent(props) {
         {!!recruitment ?
           <div>
             <Modal.Header closeButton>
-              <Modal.Title>#{recruitment.ID} {recruitment.title}</Modal.Title>
+              <Modal.Title>#{recruitment.RecruitmentID} {recruitment.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Row>
                 <Col xs={12} >
                   <Form onSubmit={saveChanges} id="recruitmentForm">
                     <p><b>Firma:</b> {recruitment.companyName}</p>
-                    <p><b>Kandydat:</b> Jan Kowalski</p>
+                    <p><b>Kandydat:</b> {props.givenName} {props.familyName}</p>
                     <p><b>Data złożenia podania:</b> {recruitment.date}</p>
                     <p><b className="float-start">Etap:</b> <Form.Select defaultValue={recruitment.stage} disabled={disable || disableForm} onChange={(e) => changeStage(e.target.value)} size="sm" className="w-auto">{/*0-złożona, 1-zaakceptwana, 2-W trakcie kwalifikacji, 3-Rozpatrzona*/}
-                      <option value="0">złożona</option>
-                      <option value="1">zaakceptwana</option>
-                      <option value="2">rozpatrywana</option>
-                      <option value="3">zakończona</option>
+                      {stages.map((stage, index) => (<option value={index}>{stage}</option>))}
                     </Form.Select></p>
                     <p><b className="float-start">Status:</b> <Form.Select defaultValue={recruitment.status} disabled={disable || disableForm} onChange={(e) => changeState(e.target.value)} size="sm" className="w-auto">{/* 0-przetwarzana, 1-przyjęty, 2-odrzucona, 3-anulowana */}
-                      <option value="0">przetwarzana</option>
-                      <option value="1">przyjęty</option>
-                      <option value="2">odrzucony</option>
-                      <option value="3">anulowane</option>
+                      {status.map((val, index) => (<option value={index}>{val}</option>))}
                     </Form.Select></p>
                   </Form>
                 </Col>
@@ -85,10 +83,10 @@ export default function RecruitmentModalComponent(props) {
             {
               isLoggedIn ?
                 <Modal.Footer>
-                  {currentUserValue().type == 1 ?
+                  {currentUserValue().type == 1 ? ( recruitment.status != 3 ?
                     <Button variant="primary" onClick={resign} disabled={disableForm}>
                       Rezyguj
-                    </Button> :
+                    </Button> : null ) :
                     <Button type="submit" form="recruitmentForm" variant="primary" disabled={disableForm}>
                       Zapisz zmiany
                     </Button>}

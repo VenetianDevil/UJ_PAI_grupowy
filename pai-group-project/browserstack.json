@@ -1,0 +1,23 @@
+{
+    "auth": {
+        "username": "weronikamaterna_j62qFv",
+        "access_key": "Rggw3MHLfUk9Pd5WpqpD"
+    },
+    "browsers": [{
+        "browser": "chrome",
+        "os": "Windows 10",
+        "versions": ["latest"]
+    }
+    ],
+    "run_settings": {
+        "cypress_config_file": "./cypress.json",
+        "project_name": "pai-group-project",
+        "build_name": "build-name",
+        "exclude": [],
+        "parallels": 5,
+        "headless": true
+    },
+    "connection_settings": {
+        "local": true
+    }
+}

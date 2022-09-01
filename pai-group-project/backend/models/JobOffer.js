@@ -11,6 +11,10 @@ JobOffers.init({
         autoIncrement: true,
         primaryKey: true
     },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     companyID: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -26,7 +30,7 @@ JobOffers.init({
         allowNull: false
     },
     workMode: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
 
@@ -34,16 +38,13 @@ JobOffers.init({
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    info: {
-        type: DataTypes.STRING
+    offerInfo: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     offerURL: {
         type: DataTypes.INTEGER,
         allowNull: true,
-    },
-    end_date: {
-        type: DataTypes.TIME,
-        allowNull: false,
     },
     createdAt:{
         type:DataTypes.DATE,
@@ -57,7 +58,7 @@ JobOffers.init({
 },
 {
     sequelize:db,
-    timestamps:false,
+    timestamps:true,
 });
 
 JobOffers.sync();

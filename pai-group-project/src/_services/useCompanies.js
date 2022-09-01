@@ -4,11 +4,11 @@ function useCompanies() {
   const [request] = useServerService();
   
   function getBestCompanies() {
-    return request('GET', `/best-companies`);
+    return request('GET', `/companies/best-companies`);
   }
 
   function getAllCompanies() {
-    return request('GET', `/companies`);
+    return request('GET', `/companies/companies`);
   }
 
   function getCompany(companyID) {
@@ -20,7 +20,7 @@ function useCompanies() {
   }
   
   function getCompanyRecruitments(companyID){
-    return request('GET', `/companies/${companyID}/recruitments`); //szukanie po companyID
+    return request('GET', `/recruitments/companies/${companyID}/recruitments`); //szukanie po companyID
   }
 
   return { getBestCompanies, getAllCompanies, getCompany, getCompanyOffers, getCompanyRecruitments };

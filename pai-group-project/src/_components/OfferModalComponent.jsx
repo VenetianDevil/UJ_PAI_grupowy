@@ -8,7 +8,7 @@ import { NotificationManager } from 'react-notifications';
 
 export default function OfferModalComponent(props) {
 
-  const { applyForAJob } = useOffers();
+  const { applyForAJob, workModes, remoteStates } = useOffers();
   const { isLoggedIn, currentUserValue } = useAuth();
   const [disableButton, setDisableButton] = useState(false);
   const modal = props.modal;
@@ -17,7 +17,7 @@ export default function OfferModalComponent(props) {
 
   function apply() {
     setDisableButton(true)
-    applyForAJob({ offerID: jobOffer.ID, userID: currentUserValue().id })
+    applyForAJob({ offerID: jobOffer.offerID, userID: currentUserValue().id })
       .then((data) => {
         NotificationManager.success("Złożyłeś podanie o pracę", "Sukces!");
         setDisableButton(false)
@@ -35,18 +35,19 @@ export default function OfferModalComponent(props) {
         {!!jobOffer ?
           <div>
             <Modal.Header closeButton>
-              <Modal.Title>#{jobOffer.ID} {jobOffer.title}</Modal.Title>
+              <Modal.Title>#{jobOffer.offerID} {jobOffer.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Row>
                 <Col xs={12} >
                   <p><b>Firma:</b> {jobOffer.companyName}</p>
                   <p><b>Miejsce pracy:</b> {jobOffer.address}</p>
-                  <p><b>Koniec rekrutacji:</b> {jobOffer.endDate}</p>
-                  <p><b>Etat:</b> {jobOffer.workMode}</p>
-                  <p><b>Tryb:</b> {jobOffer.remote}</p>
-                  <p><a target="_blank" href={jobOffer.officialOfferUrl} rel="nofollow">Link do oferty</a></p>
-                  <p>{jobOffer.info}</p>
+                  {/* <p><b>Koniec rekrutacji:</b> {jobOffer.endDate}</p> */}
+                  <p><b>Etat:</b> {jobOffer.workMode ? workModes[jobOffer.workMode-1] : "nieokreślony"}</p>
+                  <p><b>Tryb:</b> {jobOffer.remote ? remoteStates[jobOffer.remote-1] : "nieokreślony"}</p>
+                  {jobOffer.offerURL ? 
+                  <p><a target="_blank" href={jobOffer.offerURL} rel="nofollow">Link do oferty</a></p> : null }
+                  <p>{jobOffer.offerInfo}</p>
                 </Col>
 
               </Row>
